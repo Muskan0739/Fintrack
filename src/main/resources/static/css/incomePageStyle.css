@@ -1,0 +1,314 @@
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #294D61;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #294D61;
+    padding: 15px 30px;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    background-color: #0F969C;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+nav ul li a.active{
+    background-color: #1B3A4B;
+    color: white;
+}
+nav ul li a:hover{
+    color: #44b9c0;
+}
+nav ul li a.active:hover{
+    color: white;
+}
+
+
+.container {
+    width: 83%;
+    margin: 15px auto;
+    background-color: #6DA5C0;
+    padding: 100px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 6px;
+    position: relative;
+}
+
+.page-title {
+    font-size: 24px;
+    font-family: 'Roboto', sans-serif;
+    margin-top: -60px;
+}
+
+.content-box {
+    background-color: #6DA5C0;
+    margin: 15px auto;
+    padding: 20px;
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Left Section */
+.left-section {
+    width: 35%;
+    margin-left: -20px;
+   
+}
+
+/* Add Income Section */
+.add-income {
+    background-color: #2F7D86;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.add-income h3 {
+    font-family: 'Inter', sans-serif;
+    margin-top: -3px;
+}
+
+.inner-box {
+    background-color: #CFE8EA;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 3px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    margin-top: 8px;
+    color: black;
+}
+
+input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.add-btn {
+    background-color: #419DA1;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 5px;
+    width: 25%;
+    margin: 10px auto;
+}
+.add-btn:hover{
+    background-color: #2F7D86;
+}
+
+/* Income Breakdown */
+.income-breakdown {
+    background-color: #2F7D86;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 10px;;
+}
+.income-breakdown h3{
+    margin-top: 2px;
+}
+
+.breakdown-content p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+    margin-left: 50px;
+    font-weight: bold;
+  
+}
+.amount-box {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    color: #1F3B3D;
+    font-size: 14px;
+    width: 120px;
+    text-align: left;
+    font-weight: bold;
+    margin-right: 50px;
+}
+
+.breakdown-row {
+    align-items: center; 
+}
+
+/* Right Section - Records Table */
+.right-section {
+    width: 60%;
+    margin-right: 25px;
+}
+.right-section h3{
+    margin-top: -5px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top:5px;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures the border-radius applies properly */
+    
+}
+
+th {
+    background-color: #2F7D86;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+
+th i {
+    margin-right: 5px;
+    text-align: left;
+    position: relative;
+    
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    color: #1F3B3D;
+}
+
+tr:nth-child(odd) {
+    background-color: #CFE8EA;
+}
+
+tr:nth-child(even) {
+    background-color: #52A4AE;
+}
+.th-date {
+    position: relative; /* Set position for the container */
+    text-align: center;
+}
+.edit-btn {
+    background-color: #419DA1;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+    margin-right: 25px;
+    
+}
+.edit-btn:hover{
+    background-color: #2F7D86;
+    color: black;
+}
+
+.delete-icon {
+    color: #1F3B3D;
+    cursor: pointer;
+    margin-left: 8px;
+}
+.delete-icon:hover{
+    color: white;
+}
+.filter-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-right: 10px; /* Space between icon and "Date" text */
+    vertical-align: middle;
+}
+
+.filter-icon {
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    left: -30px;
+}
+
+.filter-dropdown {
+    position: absolute;
+    top: 100%; /* Show below the icon */
+    left: 0;
+    background: white;
+    border-radius: 5px;
+    width: 130px;
+    padding: 5px;
+    margin-top: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s;
+    z-index: 10;
+}
+
+.filter-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.header-text {
+    display: inline-block;
+    color: white;
+    
+    
+    
+}
+/* No records row styling */
+.no-records {
+    text-align: center;
+    font-weight: bold;
+    color: #255E75; /* Adjust color to match the theme */
+    background-color: #D1E6F1; /* Light blue to blend with the table */
+}
+
+.no-records td {
+    padding: 10px;
+    text-align: center;
+}

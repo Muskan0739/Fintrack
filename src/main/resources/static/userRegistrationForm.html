@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="js/register.js"></script>
+    
+    <style>
+        body {
+    background-color: #294D61;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+}
+.background-circles {
+    position: absolute;
+    top: -214px;
+    left: -259px;
+}
+.background-circles div {
+    position: absolute;
+    border-radius: 50%;
+}
+.circle1 {
+    width: 680px; height: 680px;
+    background-color: rgba(165, 196, 213, 0.2);
+    
+}
+.circle2 {
+    width: 600px; height: 600px;
+    background-color: rgba(70, 122, 146, 0.7);
+    left: -8px; top: -7px;
+}
+.circle3 {
+    width: 520px; height: 520px;
+    background-color: rgba(27, 58, 75, 0.5);
+    left: -17px;
+    top: -14px;
+}
+
+.register-container {
+    background-color: #FFFFFF;
+    padding: 50px;
+    padding-top: 15px; 
+    width: 650px;
+    height:295px;
+    border-radius: 0px;
+    box-shadow: 5px 5px 15px rgba(255, 255, 255, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+}
+.register-container h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+label {
+    color: #0E4666;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+input {
+    width: 30%;
+    padding: 10px;
+    border: 2px solid #bebcbc;
+    border-radius: 5px;
+}
+.register-Btn {
+    width: 33%;
+    padding: 10px;
+    background-color: #294D61;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.register-Btn:hover {
+    background-color: #1b3a4b;
+}
+/* Container for the semi-circles */
+.semicircle-container {
+   position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Base styling for semi-circles */
+.semicircle {
+    position: absolute;
+    background: transparent;
+}
+
+/* Innermost Semi-Circle */
+.semicircle-1 {
+  background-color: rgba(22, 58, 74, 0.47); /* #163A4A with 47% opacity */
+ right: 0px;
+ width: 180px;
+ height: 360px;
+ border-radius: 200px 0 0 200px;
+}
+
+/* Middle Semi-Circle */
+.semicircle-2 {
+background-color: rgba(61, 119, 139, 0.36); /* #3D778B with 36% opacity */
+right: 0px;
+width: 250px;
+height: 360px;
+border-radius: 220px 0 0 220px;
+}
+
+/* Outer Semi-Circle */
+.semicircle-3 {
+background-color: rgba(146, 195, 209, 0.51); /* #92C3D1 with 51% opacity */
+right: 0px;
+width: 320px;
+height: 360px;
+border-radius: 740px 0 0 740px;
+}
+    </style>
+</head>
+<body>
+    <div class="background-circles">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+    </div>
+    <div class="register-container">
+        <h2>Register</h2>
+        <div class="input-container">
+            <label for="username">Username</label>
+            <input type="text" id="username">
+            <label for="password">Password</label>
+            <input type="password" id="password">
+             <button class="register-Btn" id="registerButton">Register</button>
+        </div>
+        
+       
+        <div id="content"></div>
+        <div class="semicircle-container">
+            <div class="semicircle semicircle-1"></div>
+            <div class="semicircle semicircle-2"></div>
+            <div class="semicircle semicircle-3"></div>
+        </div>
+    </div>
+  
+
+</body>
+</html>

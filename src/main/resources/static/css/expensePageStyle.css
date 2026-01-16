@@ -1,0 +1,277 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #294D61;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #294D61;
+    padding: 15px 30px;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    background-color: #0F969C;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+nav ul li a.active{
+    background-color: #1B3A4B;
+    color: white;
+}
+nav ul li a:hover{
+    color: #44b9c0;
+}
+nav ul li a.active:hover{
+    color: white;
+}
+
+.container {
+    width: 83%;
+    margin: 15px auto;
+    background-color: #6DA5C0;
+    padding: 100px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 6px;
+    position: relative;
+}
+
+h2 {
+    font-family: 'Roboto', sans-serif;
+    margin-top: -60px;
+    color: #05161A;
+}
+hr{
+    border: 1px solid #05161A; 
+}
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+   
+}
+tbody {
+    min-height: 100px; 
+    display: table-row-group; 
+}
+tbody tr:empty {
+    display: table-row; 
+}
+
+th {
+    padding: 10px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #255E75; 
+    color: white; 
+}
+td{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+    padding: 10px;
+}
+tbody tr:nth-child(odd) {
+    background-color: #BFDCE5;
+    color: #255E75;
+}
+tbody tr:nth-child(even) {
+    background-color: #EAF4F8;
+    color: #1B3A4B;
+}
+
+th:nth-child(1), td:nth-child(1) { 
+    text-align: center;
+    width: 250px;
+}
+.date-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+.date-header i {
+    margin-right: 80px;/*creates space between filter icon and date*/
+}
+.delete-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #09212b;
+}
+.delete-icon:hover{
+    color:#6DA5C0;
+}
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+}
+.update-btn {
+    background-color: #3D778B;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+}
+.update-btn:hover{
+    background-color: #44b9c0;
+    color: black;
+}
+.delete-icon {
+    margin-left: auto;
+    padding-right: 20px;
+}
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-icon {
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+/* Dropdown hidden by default */
+.filter-dropdown {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 150px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 100;
+}
+
+.filter-dropdown.show {
+  display: block;
+}
+.dropdown-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: black;
+}
+
+.dropdown-option:hover {
+  background-color: #f0f0f0;
+}
+
+/* No records row styling */
+.no-records {
+    text-align: center;
+    font-weight: bold;
+    color: #255E75; /* Adjust color to match the theme */
+    background-color: #D1E6F1; /* Light blue to blend with the table */
+}
+
+.no-records td {
+    padding: 10px;
+    text-align: center;
+}
+.expense-count{
+    color: #1B3A4B;
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    text-align:left;
+}
+
+.add-expense {
+    background-color: #0C7075;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+}
+.add-expense:hover{
+    background-color:#0F969C;
+    transform: translateY(-1px);
+    box-shadow: 0px 10px 25px rgba(49, 48, 48, 0.3);
+}
+
+.budget-box {
+    margin-top: 60px;
+    width: 450px;
+    padding: 15px;
+    background-color: rgba(0, 70, 79, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+.budget-box label {
+    color: white;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.budget-box input {
+    padding: 5px;
+    border: none;
+    border-radius: 0px;
+}
+
+.set {
+    background-color: #163A4A;
+    color: white;
+    width: 15%;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 20px;
+    font-weight: 200;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.set:hover{
+    background-color: #44b9c0;
+    color:black;
+}

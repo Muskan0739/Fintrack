@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Page</title>
+    <link rel="stylesheet" href="css/expensePageStyle.css">
+    <script src="https://kit.fontawesome.com/44370cae9b.js" crossorigin="anonymous"></script>
+   
+
+</head>
+<body>
+    <nav>
+        <div class="logo">FINTRACK</div>
+        <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/expensePage" class="active">Expense</a></li>
+            <li><a href="/income">Income</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>Expense Record</h2>
+        <hr/>
+
+        <div class="table-container">
+
+           <table>
+    			<thead>
+        			<tr>
+            			<th class="date-header">
+                			<div class="filter-wrapper">
+                    	<i class="fa-solid fa-filter filter-icon" id="filterToggle"></i>
+                    	<div id="customDropdown" class="filter-dropdown"></div>
+                	</div>
+               	 Date
+            	</th>
+            	<th>Category</th>
+            	<th>Amount</th>
+            	<th>Note</th>
+            	<th>Action</th>
+        		</tr>
+    		</thead>
+   	 	<tbody id="expense-table-body">
+        	<!-- JS will populate rows -->
+    	</tbody>
+		</table>
+
+            <p class="expense-count">Today's spending summary: ₹<span></span></p>
+            
+        </div>
+        <button class="add-expense" id="addExpense">Add Expense</button>
+        <div class="budget-box">
+            <label for="budget">Set Monthly Budget:</label>
+            <input type="text" id="budget">
+            
+            <div id="confirmationMessage" style="display: none;">Budget set successfully!</div>
+            <button class="set" id="set-btn">Set</button>
+
+        </div>
+    </div>
+  
+    <script src="/js/expenseLogic.js"></script>
+</body>
+</html>
