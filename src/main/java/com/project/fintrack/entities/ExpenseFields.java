@@ -26,6 +26,15 @@ public class ExpenseFields {
 	private double amount;
 	private String note;
 	
+	private int userId;
+
+    public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	
 	public Integer getId() {
 		return id;

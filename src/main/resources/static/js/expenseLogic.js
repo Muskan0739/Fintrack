@@ -1,3 +1,15 @@
+
+const token = localStorage.getItem("jwtToken");
+if (!token) window.location.href = "/login";
+// ✅ Auth helper
+function authHeaders() {
+    const token = localStorage.getItem("jwtToken");
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Expense JS loaded ✅");
 
@@ -17,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 🔁 Load Expenses and render the table
 function loadExpenses() {
-    fetch('/api/expenses')
+    fetch('/api/expenses', { headers: authHeaders() })
         .then(response => response.json())
         .then(data => {
             console.log("Fetched expense data ✅:", data);
@@ -69,7 +81,8 @@ function setupTableListeners() {
             const id = event.target.getAttribute("data-id");
             if (id && confirm("Are you sure you want to delete this expense?")) {
                 fetch(`/expensePage/${id}`, {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers: authHeaders()
                 })
                     .then(response => {
                         if (response.ok) {
@@ -87,7 +100,7 @@ function setupTableListeners() {
     });
 }
 
-// 🧹 Filtering logic functions
+// 🧹 Filtering logic
 function populateCategoryDropdown(expenses) {
     const dropdown = document.getElementById("customDropdown");
     const filterIcon = document.getElementById("filterToggle");
@@ -97,7 +110,7 @@ function populateCategoryDropdown(expenses) {
         return;
     }
 
-    dropdown.innerHTML = ""; // Clear old options
+    dropdown.innerHTML = "";
 
     const categories = new Set(expenses.map(exp => exp.category?.trim()).filter(Boolean));
 
@@ -108,7 +121,7 @@ function populateCategoryDropdown(expenses) {
         dropdown.appendChild(createDropdownOption(category, category.toLowerCase()));
     });
 
-    setupCategoryFilter(); // Attach events
+    setupCategoryFilter();
 }
 
 function createDropdownOption(label, value) {
@@ -125,7 +138,6 @@ function setupCategoryFilter() {
 
     if (!dropdown || !filterIcon) return;
 
-    // Prevent duplicate listeners
     filterIcon.onclick = () => dropdown.classList.toggle("show");
 
     document.addEventListener("click", (e) => {
@@ -134,15 +146,13 @@ function setupCategoryFilter() {
         }
     });
 
-    // Delegate to avoid duplicate bindings
     dropdown.onclick = async (e) => {
         if (!e.target.classList.contains("dropdown-option")) return;
 
         const selected = e.target.getAttribute("data-value");
-        console.log("Selected category:", selected);
 
         try {
-            const response = await fetch('/api/expenses');
+            const response = await fetch('/api/expenses', { headers: authHeaders() });
             const data = await response.json();
 
             const filtered = selected === "all"
@@ -194,7 +204,7 @@ function setupSetBudget() {
         try {
             const response = await fetch('/expensePage', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: authHeaders(),
                 body: JSON.stringify({ budget })
             });
 
@@ -215,4 +225,3 @@ function setupSetBudget() {
         }
     });
 }
-

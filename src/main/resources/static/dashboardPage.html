@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="css/dashboardStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <script src="js/dashboardPage.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 </head>
 <body>
     <nav>
@@ -112,53 +112,9 @@
                     </div>
                 </div>
             </div>
-            
-            <!--JS code for dynamic icons based on the category of transaction-->
-            <script>
-    // Fetch transactions from backend and render them
-    fetch('/dashboard/recent-transactions')
-        .then(response => response.json())
-        .then(transactions => {
-            const categoryIcons = {
-                "Flight Ticket": "fas fa-plane",
-                "Food": "fas fa-utensils",
-                "Shopping": "fas fa-shopping-cart",
-                "Transport": "fas fa-bus",
-                "Hotel Stay": "fas fa-hotel",
-                "Entertainment": "fas fa-film",
-                "Bills": "fas fa-file-invoice-dollar",
-                "Salary": "fas fa-wallet",
-                "Others": "fas fa-tag"
-            };
-
-            const transactionList = document.getElementById("transactions-list");
-            transactionList.innerHTML = ""; // Clear any existing data
-
-            transactions.forEach((transaction, index) => {
-                const iconClass = categoryIcons[transaction.category] || "fas fa-tag";
-                const formattedAmount = `₹${transaction.amount}`;
-                
-                const transactionItem = `
-                    <div class="transaction-item">
-                        <p><i class="${iconClass}"></i> ${transaction.category}</p>
-                        <span>${formattedAmount}</span>
-                    </div>
-                    ${index < transactions.length - 1 ? '<hr>' : ''}
-                `;
-
-                transactionList.innerHTML += transactionItem;
-            });
-        })
-        .catch(error => {
-            console.error("Error loading transactions:", error);
-        });
-</script>
-
-            
-            
         </div>
     </div>
 
-    <script src="js/dashboard.js"></script>
+    <script src="js/dashboardPage.js"></script>
 </body>
 </html>

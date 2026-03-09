@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: fintrack-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: fintrackdb
+      MYSQL_USER: fintrack
+      MYSQL_PASSWORD: fintrackpwd
+      MYSQL_ROOT_PASSWORD: rootpwd
+    ports:
+      - "3307:3306" 
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fintrack-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # DB connection for the Spring Boot app
+      DB_URL: jdbc:mysql://db:3306/fintrackdb
+      DB_USERNAME: fintrack
+      DB_PASSWORD: fintrackpwd
+
+      # JWT secret
+      JWT_SECRET: change_me_to_a_long_random_secret_32_chars_minimum
+
+     
+      SERVER_PORT: "8080"
+      HIBERNATE_DDL_AUTO: update
+      SHOW_SQL: "false"
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
+

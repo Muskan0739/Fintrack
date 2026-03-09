@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,19 +22,20 @@ public class UserRegistrationController {
 	@Autowired
 	UserRegistrationServices urs;
 	 
-	  // Register user & store username in session
-    @PostMapping(path = "/userRegistration")
-    public ResponseEntity<Map<String, Object>> saveUser(@RequestBody NewUser user, HttpSession session) {
-        urs.saveUser(user);
+	@PostMapping(path = "/userRegistration")
+	public ResponseEntity<Map<String, Object>> saveUser(@RequestBody NewUser user) {
+	    String result = urs.saveUser(user);
 
-        // Store username in session
-        session.setAttribute("username", user.getUsername());
+	    Map<String, Object> response = new HashMap<>();
+	    if (result.equals("exists")) {
+	        response.put("error", "Username already exists!");
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	    }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "User registered successfully");
-        response.put("username", user.getUsername());
-        return ResponseEntity.ok(response);
-    }
+	    response.put("message", "User registered successfully");
+	    response.put("username", user.getUsername());
+	    return ResponseEntity.ok(response);
+	}
 
     //New API: Get current logged-in username from session
     @GetMapping("/currentUser")

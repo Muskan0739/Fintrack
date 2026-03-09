@@ -8,17 +8,30 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch("/userRegistration", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData)
             });
 
             const data = await response.json();
-            if (data.username) {
-                // Session now handles username tracking — no need for localStorage
-                window.location.href = "/home";
+
+            if (response.ok) {
+                // Auto login after registration
+                const loginResponse = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(userData)
+                });
+
+                const loginData = await loginResponse.json();
+                if (loginResponse.ok) {
+                    localStorage.setItem("jwtToken", loginData.token);
+                    localStorage.setItem("username", loginData.username);
+                    window.location.href = "/home";
+                }
+            } else {
+                document.getElementById("content").innerText = data.error || "Registration failed. Please try again.";
             }
+
         } catch (error) {
             console.error("Error:", error);
         }

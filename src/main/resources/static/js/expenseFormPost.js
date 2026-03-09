@@ -1,13 +1,22 @@
+const token = localStorage.getItem("jwtToken");
+if (!token) window.location.href = "/login";
+
+// ✅ Auth helper
+function authHeaders() {
+    const token = localStorage.getItem("jwtToken");
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    const addBtn = document.getElementById("add-expense");
     const form = document.getElementById("form");
 
-    // Read id from URL query params
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const isEditMode = id !== null;
 
-    // ---------- CLEAR ERROR MESSAGES ----------
     function clearErrors() {
         const amountError = document.getElementById("amountError");
         const categoryError = document.getElementById("categoryError");
@@ -20,10 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ---------- EDIT MODE: FETCH EXISTING DATA ----------
     if (isEditMode) {
-        fetch(`/addExpense/${id}`)
+        fetch(`/addExpense/${id}`, { headers: authHeaders() })
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched data ✅:", data);
                 document.getElementById("category").value = data.category;
                 document.getElementById("date").value = data.date;
                 document.getElementById("amount").value = data.amount;
@@ -35,73 +43,82 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------- FORM SUBMIT ----------
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        clearErrors(); // ⭐ important
+        clearErrors();
 
         const formData = {
             category: document.getElementById("category").value,
             date: document.getElementById("date").value,
-            amount: Number(document.getElementById("amount").value), // ⭐ ensure number
+            amount: Number(document.getElementById("amount").value),
             note: document.getElementById("note").value
         };
 
-        // ---------- UPDATE EXPENSE ----------
         if (isEditMode) {
             try {
                 const response = await fetch(`/addExpense/${id}`, {
                     method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: authHeaders(),
                     body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {
-                    console.log("Expense updated ✅");
                     window.location.href = "/expensePage";
                 } else {
-                    const errors = await response.json();
+                    let errors = {};
+                    try {
+                        errors = await response.json();
+                    } catch (e) {
+                        // Non-JSON error (e.g., 401/403 from Spring Security)
+                        if (response.status === 401 || response.status === 403) {
+                            alert("Your session has expired or you are not authorized. Please log in again.");
+                            localStorage.removeItem("jwtToken");
+                            localStorage.removeItem("username");
+                            window.location.href = "/login";
+                            return;
+                        }
+                        console.error("Unexpected error response ❌:", e);
+                        alert("Something went wrong. Please try again.");
+                        return;
+                    }
 
-                    if (errors.amount) {
-                        document.getElementById("amountError").innerText = errors.amount;
-                    }
-                    if (errors.category) {
-                        document.getElementById("categoryError").innerText = errors.category;
-                    }
-                    if (errors.date) {
-                        document.getElementById("dateError").innerText = errors.date;
-                    }
+                    if (errors.amount) document.getElementById("amountError").innerText = errors.amount;
+                    if (errors.category) document.getElementById("categoryError").innerText = errors.category;
+                    if (errors.date) document.getElementById("dateError").innerText = errors.date;
                 }
             } catch (error) {
                 console.error("Error during update ❌:", error);
             }
 
         } else {
-            // ---------- ADD EXPENSE ----------
             try {
                 const response = await fetch("/addExpense", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: authHeaders(),
                     body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {
-                    console.log("Expense added ✅");
                     window.location.href = "/expensePage";
                 } else {
-                    const errors = await response.json();
+                    let errors = {};
+                    try {
+                        errors = await response.json();
+                    } catch (e) {
+                        // Non-JSON error (e.g., 401/403 from Spring Security)
+                        if (response.status === 401 || response.status === 403) {
+                            alert("Your session has expired or you are not authorized. Please log in again.");
+                            localStorage.removeItem("jwtToken");
+                            localStorage.removeItem("username");
+                            window.location.href = "/login";
+                            return;
+                        }
+                        console.error("Unexpected error response ❌:", e);
+                        alert("Something went wrong. Please try again.");
+                        return;
+                    }
 
-                    if (errors.amount) {
-                        document.getElementById("amountError").innerText = errors.amount;
-                    }
-                    if (errors.category) {
-                        document.getElementById("categoryError").innerText = errors.category;
-                    }
-                    if (errors.date) {
-                        document.getElementById("dateError").innerText = errors.date;
-                    }
+                    if (errors.amount) document.getElementById("amountError").innerText = errors.amount;
+                    if (errors.category) document.getElementById("categoryError").innerText = errors.category;
+                    if (errors.date) document.getElementById("dateError").innerText = errors.date;
                 }
             } catch (error) {
                 console.error("Error during add ❌:", error);

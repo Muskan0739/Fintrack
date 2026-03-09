@@ -12,6 +12,16 @@ public class DashboardSummary {
 	   private Double totalIncome;
 	   private Double totalExpense;
 	   private Double remainingBalance;
+	   
+	   private int userId;
+
+	    public int getUserId() {
+			return userId;
+		}
+
+		public void setUserId(int userId) {
+			this.userId = userId;
+		}
 
 	   // Getters and Setters
 	   public Double getTotalIncome() {

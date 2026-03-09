@@ -158,3 +158,19 @@ nav ul li a:hover{
     background: linear-gradient(to right, #0C7075, #13BFC7); /* Reverse gradient */
     transform: scale(1.05); /* Makes button slightly bigger */
 }
+
+.logout-btn {
+    padding: 8px 16px;
+    background-color: #e74c3c;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
+}
+.logout-btn:hover {
+    background-color: #c0392b;
+}

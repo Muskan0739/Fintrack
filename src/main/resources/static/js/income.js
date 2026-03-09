@@ -1,5 +1,17 @@
+const token = localStorage.getItem("jwtToken");
+if (!token) window.location.href = "/login";
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("form");
+
+    // ✅ Auth helper
+    function authHeaders() {
+        const token = localStorage.getItem("jwtToken");
+        return {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        };
+    }
 
     // ✅ Load income breakdown by source
     async function loadIncomeBySource() {
@@ -14,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let totalIncome = 0;
 
         try {
-            const response = await fetch('/income/sources');
+            const response = await fetch('/income/sources', { headers: authHeaders() });
             const data = await response.json();
 
             for (const [source, total] of Object.entries(data)) {
@@ -43,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ✅ Load all income records
     async function loadIncome() {
         try {
-            const response = await fetch('/income/data');
+            const response = await fetch('/income/data', { headers: authHeaders() });
             const data = await response.json();
             const tableBody = document.getElementById("table-body");
             tableBody.innerHTML = "";
@@ -75,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // -------- CLEAR PREVIOUS ERRORS --------
         document.getElementById("dateError").innerText = "";
         document.getElementById("sourceError").innerText = "";
         document.getElementById("amountError").innerText = "";
@@ -94,42 +105,28 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: authHeaders(),
                 body: JSON.stringify(payload)
             });
 
-            // -------- 🔴 UPDATED ERROR HANDLING (CORE FIX) --------
             if (!response.ok) {
                 let errors = {};
-
                 try {
-                    // Try reading JSON (validation errors)
                     errors = await response.json();
                 } catch (err) {
                     console.error("❌ Non-JSON error response");
                 }
 
-                // Handle field-level errors safely
-                if (errors.amount) {
-                    document.getElementById("amountError").innerText = errors.amount;
-                }
-                if (errors.source) {
-                    document.getElementById("sourceError").innerText = errors.source;
-                }
-                if (errors.date) {
-                    document.getElementById("dateError").innerText = errors.date;
-                }
+                if (errors.amount) document.getElementById("amountError").innerText = errors.amount;
+                if (errors.source) document.getElementById("sourceError").innerText = errors.source;
+                if (errors.date) document.getElementById("dateError").innerText = errors.date;
 
-                // Generic fallback (important)
                 if (Object.keys(errors).length === 0) {
-                    document.getElementById("amountError").innerText =
-                        "Invalid input. Please check your data.";
+                    document.getElementById("amountError").innerText = "Invalid input. Please check your data.";
                 }
-
-                return; // ❗ stop further execution
+                return;
             }
 
-            // -------- SUCCESS --------
             const data = await response.text();
             console.log("✅ Saved:", data);
 
@@ -154,7 +151,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const confirmed = confirm("Are you sure you want to delete this income record?");
             if (confirmed) {
                 try {
-                    const response = await fetch(`/income/${id}`, { method: 'DELETE' });
+                    const response = await fetch(`/income/${id}`, {
+                        method: 'DELETE',
+                        headers: authHeaders()
+                    });
                     if (!response.ok) throw new Error("Failed to delete");
 
                     await loadIncome();
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (editBtn) {
             const id = editBtn.getAttribute("data-id");
             try {
-                const response = await fetch(`/income/${id}`);
+                const response = await fetch(`/income/${id}`, { headers: authHeaders() });
                 const data = await response.json();
 
                 document.getElementById("incomeId").value = data.id;

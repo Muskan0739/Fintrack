@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class DashboardServices {
         Map<Integer, Double> weeklyExpense = new HashMap<>();
         Map<String, Double> weeklySavings = new LinkedHashMap<>();
 
-        // Fill income map
+        // Fill income map (key = week-of-year from DB)
         for (Object[] row : dashboardRepo.getWeeklyIncome()) {
             Integer week = ((Number) row[0]).intValue();
             Double income = ((Number) row[1]).doubleValue();
@@ -93,11 +94,15 @@ public class DashboardServices {
             weeklyExpense.put(week, expense);
         }
 
-        // Combine data to calculate savings
-        for (int i = 1; i <= 4; i++) {
-            double income = weeklyIncome.getOrDefault(i, 0.0);
-            double expense = weeklyExpense.getOrDefault(i, 0.0);
-            weeklySavings.put("Week " + i, income - expense);
+        // Use the actual weeks we have data for (week-of-year)
+        TreeSet<Integer> allWeeks = new TreeSet<>();
+        allWeeks.addAll(weeklyIncome.keySet());
+        allWeeks.addAll(weeklyExpense.keySet());
+
+        for (Integer week : allWeeks) {
+            double income = weeklyIncome.getOrDefault(week, 0.0);
+            double expense = weeklyExpense.getOrDefault(week, 0.0);
+            weeklySavings.put("Week " + week, income - expense);
         }
 
         return weeklySavings;
@@ -112,7 +117,8 @@ public class DashboardServices {
         Map<String, Object> response = new HashMap<>();
 
         if (budget == null || budget <= 0) {
-            response.put("status", "no-budget");
+            // align with frontend expectation in dashboardPage.js
+            response.put("status", "no-data");
             return response;
         }
 

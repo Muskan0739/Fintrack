@@ -27,6 +27,16 @@ public class IncomeData {
 	@NotNull(message = "Amount is required")
 	private double amount;
 	
+	private int userId;
+
+    public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	
 	
 	public Integer getId() {
 		return id;

@@ -1,5 +1,16 @@
+const token = localStorage.getItem("jwtToken");
+if (!token) window.location.href = "/login";
+
+// ✅ Auth helper
+function authHeaders() {
+    const token = localStorage.getItem("jwtToken");
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Color Definitions (must be defined before usage)
     const expenseColors = ["#1B3A4B", "#467A92", "#8CCDD0", "#A5C4D5"];
     const incomeColors = ["#0F969C", "#6DA5C0", "#294D61"];
     const chartOptions = {
@@ -31,10 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-   
-
-    // 2. Savings Summary
-    fetch('/dashboard/saving-summary')
+    // Savings Summary
+    fetch('/dashboard/saving-summary', { headers: authHeaders() })
         .then(response => response.json())
         .then(data => {
             const incomeElem = document.getElementById("totalIncome");
@@ -61,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading savings data:", error));
 
-    // 3. Income/Expense Buttons
     document.getElementById("addIncome").addEventListener("click", () => {
         window.location.href = "/income";
     });
@@ -69,11 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/expensePage";
     });
 
-    // 4. Update Budget Breakdown
     updateBudgetBreakdown();
 
-    // 5. Load Income Breakdown Chart
-    fetch('/dashboard/income-breakdown')
+    // Income Breakdown Chart
+    fetch('/dashboard/income-breakdown', { headers: authHeaders() })
         .then(response => response.json())
         .then(data => {
             const labels = Object.keys(data);
@@ -96,8 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading income breakdown:", error));
 
-    // 6. Load Expense Breakdown Chart
-    fetch('/dashboard/expense-breakdown')
+    // Expense Breakdown Chart
+    fetch('/dashboard/expense-breakdown', { headers: authHeaders() })
         .then(response => response.json())
         .then(data => {
             const labels = Object.keys(data);
@@ -120,8 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading expense breakdown:", error));
 
-    // 7. Load Savings Trend Line Chart
-    fetch('/dashboard/savings-trend')
+    // Savings Trend Chart
+    fetch('/dashboard/savings-trend', { headers: authHeaders() })
         .then(res => res.json())
         .then(data => {
             const labels = Object.keys(data);
@@ -146,33 +153,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            title: {
-                                display: true,
-                                text: "Weeks",
-                                color: "#FFFFFF",
-                                font: { size: 14, weight: "bold" }
-                            },
-                            ticks: {
-                                color: "#FFFFFF",
-                                font: { size: 12 },
-                                autoSkip: false,
-                                maxRotation: 0,
-                                minRotation: 0
-                            },
+                            title: { display: true, text: "Weeks", color: "#FFFFFF", font: { size: 14, weight: "bold" } },
+                            ticks: { color: "#FFFFFF", font: { size: 12 }, autoSkip: false, maxRotation: 0, minRotation: 0 },
                             grid: { color: "rgba(255, 255, 255, 0.1)" }
                         },
                         y: {
-                            title: {
-                                display: true,
-                                text: "Savings (₹)",
-                                color: "#FFFFFF",
-                                font: { size: 14, weight: "bold" }
-                            },
-                            ticks: {
-                                color: "#FFFFFF",
-                                font: { size: 12 },
-                                beginAtZero: true
-                            },
+                            title: { display: true, text: "Savings (₹)", color: "#FFFFFF", font: { size: 14, weight: "bold" } },
+                            ticks: { color: "#FFFFFF", font: { size: 12 }, beginAtZero: true },
                             grid: { color: "rgba(255, 255, 255, 0.1)" }
                         }
                     }
@@ -181,14 +168,13 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(err => console.error("Savings trend error:", err));
 
-    // 8. Load Transactions
-    fetch('/dashboard/recent-transactions')
+    // Recent Transactions
+    fetch('/dashboard/recent-transactions', { headers: authHeaders() })
         .then(response => response.json())
         .then(data => {
             const transactionList = document.getElementById("transactions-list");
 
             if (!Array.isArray(data)) {
-                console.error("Expected array but got:", data);
                 transactionList.innerHTML = "<p>No transactions available.</p>";
                 return;
             }
@@ -212,15 +198,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const typeSign = transaction.type === "expense" ? "-" : "+";
                 const colorClass = transaction.type === "expense" ? "text-red" : "text-green";
 
-                const itemHTML = `
+                transactionList.innerHTML += `
                     <div class="transaction-item ${colorClass}">
                         <p><i class="${iconClass}"></i> ${transaction.category}</p>
                         <span>${typeSign}₹${transaction.amount}</span>
                     </div>
                     ${index < data.length - 1 ? '<hr>' : ''}
                 `;
-
-                transactionList.innerHTML += itemHTML;
             });
         })
         .catch(error => {
@@ -230,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Budget Breakdown Function
     function updateBudgetBreakdown() {
-        fetch('/dashboard/budget-breakdown')
+        fetch('/dashboard/budget-breakdown', { headers: authHeaders() })
             .then(res => res.json())
             .then(data => {
                 const budgetEl = document.getElementById("budget");
@@ -257,6 +241,4 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Error fetching budget breakdown:", error));
     }
-}); // <--- This was the missing closing brace!
-
-
+});

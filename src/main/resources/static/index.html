@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinTrack - Home</title>
     <link rel="stylesheet" href="css/homePageStyle.css">
-    <script src= "js/script.js"></script>
+    <script src="js/script.js"></script>
 </head>
 <body>
     <nav>
@@ -16,44 +16,41 @@
             <li><a href="/income" id="incomeNavBtn">Income</a></li>
             <li><a href="/dashboard" id="dashboardNavBtn">Dashboard</a></li>
         </ul>
+        <button class="logout-btn" id="logoutBtn" style="display:none;">Logout</button>
     </nav>
 
-    
     <div class="container">
         <div class="content">
             <h1 id="welcome-message">Welcome! User</h1>
             <p id="para-msg">Ready to take Control of your Finance?</p>
             <button class="register-btn" id="registerBtn">Register</button>
-            
-            <div class="placeholder-image">
-            <img src="/images/home page image.png" alt="Finance Image" class="welcome-image">
-            </div>
 
+            <div class="placeholder-image">
+                <img src="/images/home page image.png" alt="Finance Image" class="welcome-image">
+            </div>
         </div>
-     
-        
+
         <div class="cards-container">
             <div class="card-wrapper">
-            <div class="card">
-                <img src="/images/income card.webp" alt="Income"> 
-            </div>
-            <button class="card-btn" id="income-btn">Income</button>
-            </div>
-
-            <div class="card-wrapper">
-            <div class="card">
-                <img src="/images/expense card.webp" alt="Expense">
-            </div>
-            <button class="card-btn" id="expense-btn">Expense</button>
+                <div class="card">
+                    <img src="/images/income card.webp" alt="Income">
+                </div>
+                <button class="card-btn" id="income-btn">Income</button>
             </div>
 
             <div class="card-wrapper">
-            <div class="card">
-                <img src="/images/dashboard card.webp" alt="Dashboard">
-            </div>
-            <button class="card-btn" id="dashboard-btn">Dashboard</button>
+                <div class="card">
+                    <img src="/images/expense card.webp" alt="Expense">
+                </div>
+                <button class="card-btn" id="expense-btn">Expense</button>
             </div>
 
+            <div class="card-wrapper">
+                <div class="card">
+                    <img src="/images/dashboard card.webp" alt="Dashboard">
+                </div>
+                <button class="card-btn" id="dashboard-btn">Dashboard</button>
+            </div>
         </div>
     </div>
 </body>

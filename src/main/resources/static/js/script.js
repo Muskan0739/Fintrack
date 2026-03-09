@@ -1,5 +1,5 @@
 
-/*GET API for userregistration Form*/
+/* GET API for userregistration Form */
 document.addEventListener("DOMContentLoaded", () => {
     const registerBtn = document.getElementById("registerBtn");
     if (registerBtn) {
@@ -8,57 +8,55 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-window.addEventListener("DOMContentLoaded", async function () {
+
+window.addEventListener("DOMContentLoaded", function () {
     const welcomeEl = document.getElementById("welcome-message");
     const registerBtn = document.getElementById("registerBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    try {
-        const response = await fetch("/currentUser");
-        const data = await response.json();
-        const username = data.username;
+    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("jwtToken");
 
-        if (username && username !== "") {
-            welcomeEl.textContent = `Welcome, ${username}!`;
-            registerBtn.style.display = "none";
-        } else {
-            welcomeEl.textContent = "Welcome to FinTrack!";
-            registerBtn.style.display = "inline-block";
-        }
-    } catch (error) {
-        console.error("Failed to fetch current user:", error);
+    if (username && token) {
+        welcomeEl.textContent = `Welcome, ${username}!`;
+        if (registerBtn) registerBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-block";
+    } else {
         welcomeEl.textContent = "Welcome to FinTrack!";
-        registerBtn.style.display = "inline-block";
+        if (registerBtn) registerBtn.style.display = "inline-block";
+        if (logoutBtn) logoutBtn.style.display = "none";
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("username");
+            window.location.href = "/home";
+        });
     }
 });
 
-/* GET API Nav and main body buttons */
 document.addEventListener("DOMContentLoaded", () => {
-   
+    const registerBtn = document.getElementById("registerBtn");
+    if (registerBtn) {
+        registerBtn.addEventListener("click", () => {
+            window.location.href = "/userRegistration";
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
     const incomeBtns = document.querySelectorAll("#income-btn, #incomeNavBtn");
     const expenseBtns = document.querySelectorAll("#expense-btn, #expenseNavBtn");
     const dashboardBtns = document.querySelectorAll("#dashboard-btn, #dashboardNavBtn");
 
-    // event listener for Income button
     incomeBtns.forEach(btn => {
-        btn.addEventListener("click", () => {  // <-- Add e as the parameter
-           
-            window.location.href = "/income"; 
-        });
+        btn.addEventListener("click", () => { window.location.href = "/income"; });
     });
-
-    // event listener for Expense button
     expenseBtns.forEach(btn => {
-        btn.addEventListener("click", () => {  // <-- Add e as the parameter
-
-            window.location.href = "/expensePage";
-        });
+        btn.addEventListener("click", () => { window.location.href = "/expensePage"; });
     });
-
-    // event listener for Dashboard button
     dashboardBtns.forEach(btn => {
-        btn.addEventListener("click", () => {  // <-- Add e as the parameter
-         
-            window.location.href = "/dashboard";
-        });
+        btn.addEventListener("click", () => { window.location.href = "/dashboard"; });
     });
 });

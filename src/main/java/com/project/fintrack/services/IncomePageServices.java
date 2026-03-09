@@ -9,63 +9,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.fintrack.entities.IncomeData;
+import com.project.fintrack.entities.NewUser;
 import com.project.fintrack.repository.IncomeCrudRepository;
+import com.project.fintrack.repository.UserRegistrationRepository;
 
 @Service
 public class IncomePageServices {
 
-	@Autowired
-	IncomeCrudRepository incRepo;
-	
-	public void saveIncome(IncomeData incomedata) {
-		incRepo.save(incomedata);
-	}
-	
-	public List<IncomeData> getAllIncomeRecords(){
-		return incRepo.findAll();
-	}
-	
-	public IncomeData findIncomeById(Integer id) {
-		return incRepo.findById(id).orElse(null);
-	}
+    @Autowired
+    IncomeCrudRepository incRepo;
 
-	public void save(IncomeData updatedIncome, Integer id) {
-		IncomeData income= incRepo.findById(id).get();
-		
-		income.setId(updatedIncome.getId());
-		income.setDate(updatedIncome.getDate());
-		income.setAmount(updatedIncome.getAmount());
-		income.setSource(updatedIncome.getSource());
-		
-		incRepo.save(income);
-	}
-	
-	public Boolean deleteIncomeRecord(Integer id) {
-	    // Check if the record exists first
-	    Optional<IncomeData> incomeRecord = incRepo.findById(id);
+    @Autowired
+    UserRegistrationRepository userRepo;
 
-	    // If the record exists, proceed with delete
-	    if (incomeRecord.isPresent()) {
-	        incRepo.deleteById(id);
-	        return true;  // Successfully deleted
-	    } else {
-	        return false;  // Record not found, nothing to delete
-	    }
-	}
-	
-	public Map<String, Double> getTotalIncomeBySource() {
-	    List<Object[]> results = incRepo.findTotalIncomeBySource();
-	    Map<String, Double> incomeMap = new HashMap<>();
+    public void saveIncome(IncomeData incomeData, String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+        incomeData.setUserId(user.getId());
+        incRepo.save(incomeData);
+    }
 
-	    for (Object[] row : results) {
-	        String source = (String) row[0];
-	        Double total = ((Number) row[1]).doubleValue();
-	        incomeMap.put(source, total);
-	    }
+    public List<IncomeData> getAllIncomeRecords(String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+        return incRepo.findByUserId(user.getId());
+    }
 
-	    return incomeMap;
-	}
+    public IncomeData findIncomeById(Integer id) {
+        return incRepo.findById(id).orElse(null);
+    }
 
+    public void save(IncomeData updatedIncome, Integer id) {
+        IncomeData income = incRepo.findById(id).get();
+        income.setDate(updatedIncome.getDate());
+        income.setAmount(updatedIncome.getAmount());
+        income.setSource(updatedIncome.getSource());
+        incRepo.save(income);
+    }
 
+    public Boolean deleteIncomeRecord(Integer id) {
+        Optional<IncomeData> incomeRecord = incRepo.findById(id);
+        if (incomeRecord.isPresent()) {
+            incRepo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
+    public Map<String, Double> getTotalIncomeBySource(String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+        List<Object[]> results = incRepo.findTotalIncomeBySourceAndUserId(user.getId());
+        Map<String, Double> incomeMap = new HashMap<>();
+        for (Object[] row : results) {
+            String source = (String) row[0];
+            Double total = ((Number) row[1]).doubleValue();
+            incomeMap.put(source, total);
+        }
+        return incomeMap;
+    }
 }
