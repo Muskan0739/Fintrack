@@ -39,7 +39,7 @@ public class SecurityConfig {
                     .requestMatchers(
                         "/userRegistration",
                         "/api/login",
-                        "/home",
+                        "/",
                         "/login",
 
                         "/index.html",

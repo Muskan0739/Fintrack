@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomePageController {
 
     //home page GET API
-    @GetMapping(path = "/home")
+    @GetMapping(path = "/")
     public String showHomepage() {
         return "redirect:/index.html";
     }
