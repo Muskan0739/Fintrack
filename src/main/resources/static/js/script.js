@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded", function () {
         logoutBtn.addEventListener("click", () => {
             localStorage.removeItem("jwtToken");
             localStorage.removeItem("username");
-            window.location.href = "/home";
+            window.location.href = "/";
         });
     }
 });

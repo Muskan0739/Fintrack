@@ -55,6 +55,7 @@ public class SecurityConfig {
                         "/images/**",
                         "/favicon.ico"
                     ).permitAll()
+                    .requestMatchers(HttpMethod.POST, "/userRegistration").permitAll()
 
                     .requestMatchers(HttpMethod.GET,
                         "/expensePage",
