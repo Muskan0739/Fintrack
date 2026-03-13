@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (loginResponse.ok) {
                     localStorage.setItem("jwtToken", loginData.token);
                     localStorage.setItem("username", loginData.username);
-                    window.location.href = "/home";
+                    window.location.href = "/";
                 }
             } else {
                 document.getElementById("content").innerText = data.error || "Registration failed. Please try again.";

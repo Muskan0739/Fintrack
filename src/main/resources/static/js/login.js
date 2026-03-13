@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("username", data.username);
 
                 // Redirect to home page
-                window.location.href = "/home";
+                window.location.href = "/";
             } else {
                 document.getElementById("content").innerText = data.error || "Invalid credentials!";
             }
