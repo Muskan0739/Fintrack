@@ -32,8 +32,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
+    	http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> {})
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(
@@ -55,18 +56,13 @@ public class SecurityConfig {
                         "/images/**",
                         "/favicon.ico"
                     ).permitAll()
+
                     .requestMatchers(HttpMethod.POST, "/userRegistration").permitAll()
 
-                    .requestMatchers(HttpMethod.GET,
-                        "/expensePage",
-                        "/income",
-                        "/incomePage",
-                        "/dashboard",
-                        "/addExpense"
-                    ).permitAll()
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                     .anyRequest().authenticated()
-                )
+            )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
