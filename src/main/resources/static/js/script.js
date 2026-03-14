@@ -28,12 +28,16 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-            localStorage.removeItem("jwtToken");
-            localStorage.removeItem("username");
-            window.location.href = "/";
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("username");
+        fetch("/api/logout", { method: "POST" })
+            .finally(() => {
+                window.location.href = "/";
+            });
         });
     }
+
 });
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -27,13 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     localStorage.setItem("jwtToken", loginData.token);
                     localStorage.setItem("username", loginData.username);
                     window.location.href = "/";
+                } else {
+                    document.getElementById("content").innerText = "Registration successful, but auto-login failed. Please login manually.";
                 }
             } else {
                 document.getElementById("content").innerText = data.error || "Registration failed. Please try again.";
             }
-
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Registration error:", error);
+            document.getElementById("content").innerText = "Network error. Please try again.";
         }
     });
 });

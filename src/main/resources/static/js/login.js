@@ -18,23 +18,19 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const data = await response.json();
-		
-			console.log("Status:", response.status);
-			console.log("Data:", data);
 
             if (response.ok) {
-                // Store the token in localStorage
-				console.log("Login response:", data);
+                //store token and username
                 localStorage.setItem("jwtToken", data.token);
                 localStorage.setItem("username", data.username);
-
-                // Redirect to home page
+                
+                //Redirect to home page
                 window.location.href = "/";
             } else {
                 document.getElementById("content").innerText = data.error || "Invalid credentials!";
             }
-
         } catch (error) {
+            console.error("Login error:", error);
             document.getElementById("content").innerText = "Something went wrong. Please try again.";
         }
     });
