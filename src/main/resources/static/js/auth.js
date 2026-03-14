@@ -8,8 +8,11 @@ function getAuthToken() {
     const originalFetch = window.fetch;
     
     window.fetch = async function(url, options = {}) {
-        // Only add token for API endpoints (not for static files)
-        if (url.includes('/api/') || url.includes('/income') || url.includes('/expense') || url.includes('/dashboard')) {
+        // Add token for ALL API endpoints (including registration and login)
+        if (url.includes('/api/') || url.includes('/userRegistration') || 
+            url.includes('/income') || url.includes('/expense') || 
+            url.includes('/dashboard') || url.includes('/expensePage')) {
+            
             const token = getAuthToken();
             if (token) {
                 options.headers = {
@@ -28,10 +31,11 @@ function checkAuth() {
     const token = getAuthToken();
     const username = localStorage.getItem('username');
     
+    // Don't redirect on registration page
     if (!token || !username) {
-        // Redirect to login if not authenticated
         if (!window.location.pathname.includes('/login') && 
-            !window.location.pathname.includes('/userRegistration')) {
+            !window.location.pathname.includes('/userRegistration') &&
+            !window.location.pathname.includes('/index.html')) {
             window.location.href = '/login';
         }
     }

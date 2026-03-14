@@ -57,8 +57,6 @@ public class SecurityConfig {
                         "/favicon.ico"
                     ).permitAll()
 
-                    .requestMatchers(HttpMethod.POST, "/userRegistration").permitAll()
-
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                     .anyRequest().authenticated()
