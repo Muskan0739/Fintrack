@@ -4,6 +4,24 @@ if (!token) window.location.href = "/login";
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("form");
 
+    // Navigation handlers for authenticated pages
+    const navExpense = document.getElementById("nav-expense");
+    const navDashboard = document.getElementById("nav-dashboard");
+
+    if (navExpense) {
+        navExpense.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/expensePage");
+        });
+    }
+
+    if (navDashboard) {
+        navDashboard.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/dashboard");
+        });
+    }
+
     // ✅ Auth helper
     function authHeaders() {
         const token = localStorage.getItem("jwtToken");
@@ -182,6 +200,20 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+
+    // Function to check authentication before navigation (shared with script.js)
+    function checkAuthAndNavigate(url) {
+        const token = localStorage.getItem("jwtToken");
+        const username = localStorage.getItem("username");
+        
+        if (!token || !username) {
+            // Not authenticated, redirect to login
+            window.location.href = "/login";
+        } else {
+            // Authenticated, navigate to the page
+            window.location.href = url;
+        }
+    }
 
     // ✅ Initial load
     loadIncome();

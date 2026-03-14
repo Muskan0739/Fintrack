@@ -20,12 +20,44 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Navigation handlers for authenticated pages
+    const navIncome = document.getElementById("nav-income");
+    const navDashboard = document.getElementById("nav-dashboard");
+
+    if (navIncome) {
+        navIncome.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/income");
+        });
+    }
+
+    if (navDashboard) {
+        navDashboard.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/dashboard");
+        });
+    }
+
     if (document.getElementById("expense-table-body")) {
         loadExpenses();
     }
 
     setupSetBudget();
 });
+
+// Function to check authentication before navigation (shared with script.js)
+function checkAuthAndNavigate(url) {
+    const token = localStorage.getItem("jwtToken");
+    const username = localStorage.getItem("username");
+    
+    if (!token || !username) {
+        // Not authenticated, redirect to login
+        window.location.href = "/login";
+    } else {
+        // Authenticated, navigate to the page
+        window.location.href = url;
+    }
+}
 
 // 🔁 Load Expenses and render the table
 function loadExpenses() {

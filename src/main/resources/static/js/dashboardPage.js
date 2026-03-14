@@ -11,6 +11,24 @@ function authHeaders() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Navigation handlers for authenticated pages
+    const navExpense = document.getElementById("nav-expense");
+    const navIncome = document.getElementById("nav-income");
+
+    if (navExpense) {
+        navExpense.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/expensePage");
+        });
+    }
+
+    if (navIncome) {
+        navIncome.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/income");
+        });
+    }
+
     const expenseColors = ["#1B3A4B", "#467A92", "#8CCDD0", "#A5C4D5"];
     const incomeColors = ["#0F969C", "#6DA5C0", "#294D61"];
     const chartOptions = {
@@ -211,6 +229,20 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Transaction history error:", error);
             document.getElementById("transactions-list").innerHTML = "<p>Error loading transactions.</p>";
         });
+
+    // Function to check authentication before navigation (shared with script.js)
+    function checkAuthAndNavigate(url) {
+        const token = localStorage.getItem("jwtToken");
+        const username = localStorage.getItem("username");
+        
+        if (!token || !username) {
+            // Not authenticated, redirect to login
+            window.location.href = "/login";
+        } else {
+            // Authenticated, navigate to the page
+            window.location.href = url;
+        }
+    }
 
     // Budget Breakdown Function
     function updateBudgetBreakdown() {

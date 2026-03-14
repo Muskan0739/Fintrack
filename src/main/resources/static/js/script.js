@@ -28,16 +28,12 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("jwtToken");
-        localStorage.removeItem("username");
-        fetch("/api/logout", { method: "POST" })
-            .finally(() => {
-                window.location.href = "/";
-            });
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("username");
+            window.location.href = "/";
         });
     }
-
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -49,18 +45,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// Function to check authentication before navigation
+function checkAuthAndNavigate(url) {
+    const token = localStorage.getItem("jwtToken");
+    const username = localStorage.getItem("username");
+    
+    if (!token || !username) {
+        // Not authenticated, redirect to login
+        window.location.href = "/login";
+    } else {
+        // Authenticated, navigate to the page
+        window.location.href = url;
+    }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     const incomeBtns = document.querySelectorAll("#income-btn, #incomeNavBtn");
     const expenseBtns = document.querySelectorAll("#expense-btn, #expenseNavBtn");
     const dashboardBtns = document.querySelectorAll("#dashboard-btn, #dashboardNavBtn");
 
     incomeBtns.forEach(btn => {
-        btn.addEventListener("click", () => { window.location.href = "/income"; });
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/income");
+        });
     });
     expenseBtns.forEach(btn => {
-        btn.addEventListener("click", () => { window.location.href = "/expensePage"; });
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/expensePage");
+        });
     });
     dashboardBtns.forEach(btn => {
-        btn.addEventListener("click", () => { window.location.href = "/dashboard"; });
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            checkAuthAndNavigate("/dashboard");
+        });
     });
 });
