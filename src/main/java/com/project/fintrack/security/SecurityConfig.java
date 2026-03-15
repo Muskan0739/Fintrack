@@ -42,6 +42,7 @@ public class SecurityConfig {
                         "/api/login",
                         "/",
                         "/login",
+                        "/index",
 
                         "/index.html",
                         "/loginPage.html",
