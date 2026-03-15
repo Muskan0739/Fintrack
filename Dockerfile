@@ -27,4 +27,5 @@ COPY --from=build /app/target/*.jar fintrack.jar
 EXPOSE 8080
 
 # Config (DB_URL, DB_USERNAME, DB_PASSWORD, JWT_SECRET, etc.) comes from env vars
-ENTRYPOINT ["java","-jar","/app/fintrack.jar"]
+# Force server port to 8080 for Render compatibility
+ENTRYPOINT ["java","-jar","-Dserver.port=8080","/app/fintrack.jar"]
