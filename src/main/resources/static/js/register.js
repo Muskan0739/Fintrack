@@ -37,31 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (response.ok) {
-                console.log("Registration successful, attempting auto-login");
+                console.log("Registration successful, redirecting to login page");
                 
-                // Auto login after registration
-                const loginResponse = await fetch("/api/login", {
-                    method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify(userData)
-                });
-
-                console.log("Login response status:", loginResponse.status);
+                // Instead of auto-login, redirect to login page for faster response
+                document.getElementById("content").innerText = "Registration successful! Redirecting to login...";
                 
-                const loginData = await loginResponse.json();
-                console.log("Login response data:", loginData);
-                
-                if (loginResponse.ok && loginData.token) {
-                    localStorage.setItem("jwtToken", loginData.token);
-                    localStorage.setItem("username", loginData.username);
-                    console.log("Auto-login successful, redirecting to home");
-                    window.location.href = "/";
-                } else {
-                    document.getElementById("content").innerText = "Registration successful, but auto-login failed. Please login manually.";
-                }
+                // Small delay to show success message, then redirect to login
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 1000);
             } else {
                 // Check if it's a username exists error
                 if (data.error && data.error.includes("exists")) {
