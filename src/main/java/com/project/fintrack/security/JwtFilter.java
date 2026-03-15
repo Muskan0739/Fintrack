@@ -53,8 +53,10 @@ public class JwtFilter extends OncePerRequestFilter {
             token = authHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(token);
+                System.out.println("JWT Filter: Extracted username: " + username);
             } catch (Exception e) {
                 System.out.println("JWT ERROR: " + e.getMessage());
+                // Invalid token format, continue without authentication
             }
         }
 
@@ -64,13 +66,16 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 if (jwtUtil.validateToken(token, userDetails.getUsername())) {
+                    System.out.println("JWT Filter: Token validated successfully for user: " + username);
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                } else {
+                    System.out.println("JWT Filter: Token validation failed for user: " + username);
                 }
             } catch (UsernameNotFoundException ex) {
-                System.out.println("JWT ERROR: " + ex.getMessage());
+                System.out.println("JWT ERROR: User not found: " + username);
                 // invalid token or deleted user -> proceed without authentication
             }
         }

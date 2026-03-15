@@ -2,10 +2,12 @@
 function authHeaders() {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
+        console.error("❌ No JWT token found, redirecting to login");
         // Redirect to login if no token
         window.location.href = "/login";
         return null;
     }
+    console.log("✅ Using JWT token:", token.substring(0, 20) + "...");
     return {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -14,7 +16,10 @@ function authHeaders() {
 
 // Check authentication on page load
 const token = localStorage.getItem("jwtToken");
+console.log("🔍 Checking authentication on page load...");
+console.log("Token found:", !!token);
 if (!token) {
+    console.error("❌ No token found, redirecting to login");
     window.location.href = "/login";
 }
 
@@ -52,8 +57,23 @@ document.addEventListener("DOMContentLoaded", () => {
         let totalIncome = 0;
 
         try {
-            const response = await fetch('/income/sources', { headers: authHeaders() });
+            console.log("🔍 Fetching income sources...");
+            const headers = authHeaders();
+            if (!headers) {
+                console.error("❌ No headers returned from authHeaders()");
+                return;
+            }
+            
+            const response = await fetch('/income/sources', { headers: headers });
+            console.log("🔍 Response status:", response.status);
+            
+            if (!response.ok) {
+                console.error("❌ Server error:", response.status, response.statusText);
+                return;
+            }
+            
             const data = await response.json();
+            console.log("✅ Income sources data:", data);
 
             for (const [source, total] of Object.entries(data)) {
                 totalIncome += total;
@@ -81,8 +101,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // ✅ Load all income records
     async function loadIncome() {
         try {
-            const response = await fetch('/income/data', { headers: authHeaders() });
+            console.log("🔍 Fetching income records...");
+            const headers = authHeaders();
+            if (!headers) {
+                console.error("❌ No headers returned from authHeaders()");
+                return;
+            }
+            
+            const response = await fetch('/income/data', { headers: headers });
+            console.log("🔍 Response status:", response.status);
+            
+            if (!response.ok) {
+                console.error("❌ Server error:", response.status, response.statusText);
+                return;
+            }
+            
             const data = await response.json();
+            console.log("✅ Income records data:", data);
+            
             const tableBody = document.getElementById("table-body");
             tableBody.innerHTML = "";
 

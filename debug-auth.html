@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status-box {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .test-btn { background-color: #007bff; color: white; }
+        .test-btn:hover { background-color: #0056b3; }
+        .clear-btn { background-color: #6c757d; color: white; }
+        .clear-btn:hover { background-color: #545b62; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔍 Authentication Debug Tool</h2>
+        
+        <div id="status" class="status-box info">
+            Checking authentication status...
+        </div>
+
+        <div style="margin: 20px 0;">
+            <button class="test-btn" onclick="checkLocalStorage()">1. Check Local Storage</button>
+            <button class="test-btn" onclick="testAuthHeaders()">2. Test Auth Headers</button>
+            <button class="test-btn" onclick="testIncomeEndpoint()">3. Test Income Endpoint</button>
+            <button class="test-btn" onclick="testDashboardEndpoint()">4. Test Dashboard Endpoint</button>
+            <button class="clear-btn" onclick="clearResults()">Clear Results</button>
+        </div>
+
+        <div id="results">
+            <!-- Results will be displayed here -->
+        </div>
+
+        <div style="margin-top: 30px; padding: 15px; background: #e9ecef; border-radius: 5px;">
+            <h4>📝 Instructions:</h4>
+            <ol>
+                <li>First, log in to your application</li>
+                <li>Open this debug page in the same browser</li>
+                <li>Click the buttons in order to test authentication</li>
+                <li>Check the console for detailed logs</li>
+                <li>Share the results if you need help debugging</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status-box ${type}`;
+            status.textContent = message;
+        }
+
+        function addResult(title, content, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <h4>${title}</h4>
+                <div class="status-box ${type}">
+                    <pre>${content}</pre>
+                </div>
+            `;
+            results.appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            updateStatus('Results cleared. Ready to test again.', 'info');
+        }
+
+        function checkLocalStorage() {
+            updateStatus('Checking localStorage...', 'info');
+            
+            const token = localStorage.getItem('jwtToken');
+            const username = localStorage.getItem('username');
+            
+            let message = `Token: ${token ? '✅ Found' : '❌ Missing'}\n`;
+            message += `Username: ${username ? '✅ Found' : '❌ Missing'}\n`;
+            
+            if (token) {
+                message += `\nToken preview: ${token.substring(0, 20)}...\n`;
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    message += `\nToken expires: ${new Date(payload.exp * 1000).toLocaleString()}\n`;
+                    message += `Current time: ${new Date().toLocaleString()}\n`;
+                    message += `Expired: ${payload.exp * 1000 < Date.now() ? '❌ Yes' : '✅ No'}\n`;
+                } catch (e) {
+                    message += `\n❌ Cannot decode token: ${e.message}\n`;
+                }
+            }
+
+            addResult('LocalStorage Check', message, token && username ? 'success' : 'error');
+            updateStatus('LocalStorage check complete.', token && username ? 'success' : 'error');
+        }
+
+        function authHeaders() {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                return null;
+            }
+            return {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            };
+        }
+
+        async function testAuthHeaders() {
+            updateStatus('Testing authHeaders function...', 'info');
+            
+            const headers = authHeaders();
+            
+            if (!headers) {
+                addResult('Auth Headers Test', '❌ No headers returned - no token found', 'error');
+                updateStatus('Auth headers test failed - no token', 'error');
+                return;
+            }
+
+            addResult('Auth Headers Test', `✅ Headers generated successfully:\n${JSON.stringify(headers, null, 2)}`, 'success');
+            updateStatus('Auth headers test passed', 'success');
+        }
+
+        async function testEndpoint(url, description) {
+            updateStatus(`Testing ${description}...`, 'info');
+            
+            const headers = authHeaders();
+            if (!headers) {
+                addResult(`${description} Test`, '❌ Cannot test - no authentication headers', 'error');
+                updateStatus(`${description} test failed - no auth`, 'error');
+                return;
+            }
+
+            try {
+                console.log(`🔍 Testing ${description} endpoint...`);
+                const response = await fetch(url, { headers: headers });
+                
+                console.log(`🔍 ${description} response status:`, response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    addResult(`${description} Test`, `❌ Server error: ${response.status} ${response.statusText}\n\nResponse: ${errorText}`, 'error');
+                    updateStatus(`${description} test failed - server error`, 'error');
+                    return;
+                }
+
+                const data = await response.json();
+                addResult(`${description} Test`, `✅ Success! Status: ${response.status}\n\nData: ${JSON.stringify(data, null, 2)}`, 'success');
+                updateStatus(`${description} test passed`, 'success');
+                
+            } catch (error) {
+                console.error(`❌ ${description} test error:`, error);
+                addResult(`${description} Test`, `❌ Network error: ${error.message}`, 'error');
+                updateStatus(`${description} test failed - network error`, 'error');
+            }
+        }
+
+        async function testIncomeEndpoint() {
+            await testEndpoint('/income/data', 'Income Endpoint');
+        }
+
+        async function testDashboardEndpoint() {
+            await testEndpoint('/dashboard/saving-summary', 'Dashboard Endpoint');
+        }
+
+        // Auto-check on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLocalStorage();
+        });
+    </script>
+</body>
+</html>
