@@ -1,13 +1,21 @@
-const token = localStorage.getItem("jwtToken");
-if (!token) window.location.href = "/login";
-
-// ✅ Auth helper
+// ✅ Enhanced Auth helper with automatic redirect
 function authHeaders() {
     const token = localStorage.getItem("jwtToken");
+    if (!token) {
+        // Redirect to login if no token
+        window.location.href = "/login";
+        return null;
+    }
     return {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
     };
+}
+
+// Check authentication on page load
+const token = localStorage.getItem("jwtToken");
+if (!token) {
+    window.location.href = "/login";
 }
 
 document.addEventListener("DOMContentLoaded", function () {

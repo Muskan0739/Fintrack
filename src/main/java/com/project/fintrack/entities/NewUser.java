@@ -12,9 +12,9 @@ public class NewUser {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 	
-	public String username;
+	private String username;
 	
-	public String password;
+	private String password;
 
 	public Integer getId() {
 		return id;
@@ -39,7 +39,4 @@ public class NewUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
 }

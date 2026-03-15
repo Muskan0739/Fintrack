@@ -59,6 +59,31 @@ function checkAuthAndNavigate(url) {
     }
 };
 
+// Enhanced auth helper with token validation
+function authHeaders() {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+        // Redirect to login if no token
+        window.location.href = "/login";
+        return null;
+    }
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
+// Check if token is expired (basic check)
+function isTokenExpired(token) {
+    if (!token) return true;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp * 1000 < Date.now();
+    } catch {
+        return true;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const incomeBtns = document.querySelectorAll("#income-btn, #incomeNavBtn");
     const expenseBtns = document.querySelectorAll("#expense-btn, #expenseNavBtn");
