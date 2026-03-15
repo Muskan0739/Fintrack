@@ -28,7 +28,7 @@ public class UserRegistrationController {
 
 	    Map<String, Object> response = new HashMap<>();
 	    if (result.equals("exists")) {
-	        response.put("error", "exists");
+	        response.put("error", "Username already exists!");
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	    }
 

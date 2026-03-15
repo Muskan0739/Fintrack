@@ -42,7 +42,6 @@ public class SecurityConfig {
                         "/api/login",
                         "/",
                         "/login",
-                        "/index",
 
                         "/index.html",
                         "/loginPage.html",
@@ -60,14 +59,7 @@ public class SecurityConfig {
 
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                    // Allow access to protected pages for authenticated users
-                    .requestMatchers(
-                        "/income",
-                        "/expensePage", 
-                        "/dashboard"
-                    ).authenticated()
-
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

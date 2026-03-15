@@ -37,6 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
                path.startsWith("/userRegistration") ||
                path.equals("/login") ||
                path.equals("/home") ||
+               path.endsWith(".html") ||
                path.startsWith("/js/") ||
                path.startsWith("/css/");
     }
