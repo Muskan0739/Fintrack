@@ -57,6 +57,13 @@ public class SecurityConfig {
                         "/favicon.ico"
                     ).permitAll()
 
+                    // Allow access to protected pages for authenticated users
+                    .requestMatchers(
+                        "/income",
+                        "/expensePage", 
+                        "/dashboard"
+                    ).authenticated()
+
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                     .anyRequest().authenticated()
