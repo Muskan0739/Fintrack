@@ -22,13 +22,13 @@ public class UserRegistrationController {
 	@Autowired
 	UserRegistrationServices urs;
 	 
-	@PostMapping(path = "/userRegistration")
+    @PostMapping(path = "/userRegistration")
 	public ResponseEntity<Map<String, Object>> saveUser(@RequestBody NewUser user) {
 	    String result = urs.saveUser(user);
 
 	    Map<String, Object> response = new HashMap<>();
 	    if (result.equals("exists")) {
-	        response.put("error", "Username already exists!");
+	        response.put("error", "exists");
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	    }
 

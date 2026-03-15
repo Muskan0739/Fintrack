@@ -63,7 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("content").innerText = "Registration successful, but auto-login failed. Please login manually.";
                 }
             } else {
-                document.getElementById("content").innerText = data.error || "Registration failed. Please try again.";
+                // Check if it's a username exists error
+                if (data.error && data.error.includes("exists")) {
+                    document.getElementById("content").innerText = "Username already exists. Please choose a different username.";
+                } else {
+                    document.getElementById("content").innerText = data.error || "Registration failed. Please try again.";
+                }
             }
         } catch (error) {
             console.error("Registration error:", error);
