@@ -70,7 +70,6 @@ public class SecurityConfig {
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        System.out.println("SecurityConfig: JWT Filter added to filter chain");
         return http.build();
     }
     
