@@ -69,9 +69,23 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // Savings Summary
-    fetch('/dashboard/saving-summary', { headers: authHeaders() })
-        .then(response => response.json())
+    console.log("🔍 Dashboard: Fetching savings summary...");
+    const savingsHeaders = authHeaders();
+    if (!savingsHeaders) {
+        console.error("❌ Dashboard: No auth headers for savings summary");
+        return;
+    }
+    
+    fetch('/dashboard/saving-summary', { headers: savingsHeaders })
+        .then(response => {
+            console.log("🔍 Dashboard: Savings summary response status:", response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("✅ Dashboard: Savings summary data:", data);
             const incomeElem = document.getElementById("totalIncome");
             const expenseElem = document.getElementById("totalExpense");
             const savingElem = document.getElementById("savingBalance");
@@ -94,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 deficitMessage.style.display = "none";
             }
         })
-        .catch(error => console.error("Error loading savings data:", error));
+        .catch(error => console.error("❌ Dashboard: Error loading savings data:", error));
 
     document.getElementById("addIncome").addEventListener("click", () => {
         window.location.href = "/income";
@@ -254,9 +268,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Budget Breakdown Function
     function updateBudgetBreakdown() {
-        fetch('/dashboard/budget-breakdown', { headers: authHeaders() })
-            .then(res => res.json())
+        console.log("🔍 Dashboard: Fetching budget breakdown...");
+        const budgetHeaders = authHeaders();
+        if (!budgetHeaders) {
+            console.error("❌ Dashboard: No auth headers for budget breakdown");
+            return;
+        }
+        
+        fetch('/dashboard/budget-breakdown', { headers: budgetHeaders })
+            .then(response => {
+                console.log("🔍 Dashboard: Budget breakdown response status:", response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log("✅ Dashboard: Budget breakdown data:", data);
                 const budgetEl = document.getElementById("budget");
                 const spentEl = document.getElementById("spent");
                 const remainingEl = document.getElementById("remaining");
@@ -279,6 +307,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
             })
-            .catch(error => console.error("Error fetching budget breakdown:", error));
+            .catch(error => console.error("❌ Dashboard: Error fetching budget breakdown:", error));
     }
 });

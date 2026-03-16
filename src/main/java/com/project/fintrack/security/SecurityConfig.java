@@ -45,6 +45,7 @@ public class SecurityConfig {
                         "/income",
                         "/expensePage",
                         "/dashboard",
+                        "/addExpense",
 
                         "/index.html",
                         "/loginPage.html",
