@@ -32,13 +32,16 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String path = request.getServletPath();
-        return path.equals("/api/login") ||
+        boolean shouldSkip = path.equals("/api/login") ||
                path.equals("/userRegistration") ||
                path.startsWith("/userRegistration") ||
                path.equals("/login") ||
                path.equals("/home") ||
                path.startsWith("/js/") ||
                path.startsWith("/css/");
+        
+        System.out.println("JWT Filter: Checking path: " + path + ", shouldSkip: " + shouldSkip);
+        return shouldSkip;
     }
 
     @Override
