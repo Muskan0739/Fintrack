@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	http
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/userRegistration"))
+            .csrf(csrf -> csrf.disable())
             .cors(cors -> {})
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
