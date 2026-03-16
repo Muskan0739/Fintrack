@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok && data.token) {
                 console.log("✅ Login: Authentication successful!");
-                console.log("✅ Login: JWT token received:", data.token.substring(0, Math.min(20, data.token.length())) + "...");
+                console.log("✅ Login: JWT token received:", data.token.substring(0, Math.min(20, data.token.length)) + "...");
                 
                 // Store the token in localStorage
                 localStorage.setItem("jwtToken", data.token);
