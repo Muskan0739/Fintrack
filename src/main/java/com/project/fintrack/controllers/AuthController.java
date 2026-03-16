@@ -30,6 +30,8 @@ public class AuthController {
     @PostMapping("/api/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody NewUser loginRequest) {
         try {
+            System.out.println("🔍 AuthController: Attempting login for user: " + loginRequest.getUsername());
+            
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                     loginRequest.getUsername(),
@@ -37,15 +39,20 @@ public class AuthController {
                 )
             );
 
+            System.out.println("✅ AuthController: Authentication successful for user: " + loginRequest.getUsername());
+            
             String token = jwtUtil.generateToken(loginRequest.getUsername());
+            System.out.println("✅ AuthController: JWT token generated: " + token.substring(0, Math.min(20, token.length())) + "...");
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("username", loginRequest.getUsername());
 
+            System.out.println("✅ AuthController: Login response prepared successfully");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
+            System.out.println("❌ AuthController: Login failed for user: " + loginRequest.getUsername() + " - " + e.getMessage());
             Map<String, Object> response = new HashMap<>();
             response.put("error", "Invalid username or password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);

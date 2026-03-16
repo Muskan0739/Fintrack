@@ -60,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("🔍 Fetching income sources...");
             const headers = authHeaders();
             if (!headers) {
-                console.error("❌ No headers returned from authHeaders()");
+                console.error("❌ No headers returned from authHeaders() - redirecting to login");
+                // authHeaders() already redirects, but we need to return here
                 return;
             }
             
@@ -259,7 +260,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Initial load
-    loadIncome();
-    loadIncomeBySource();
+    // ✅ Initial load - Check authentication first
+    console.log("🔍 Checking authentication before loading data...");
+    const headers = authHeaders();
+    if (headers) {
+        // Only load data if authentication is successful
+        loadIncome();
+        loadIncomeBySource();
+    }
+    // If authHeaders() returned null, it already redirected to login
 });
