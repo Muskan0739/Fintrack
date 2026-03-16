@@ -27,11 +27,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        
+        // Always skip OPTIONS requests
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            System.out.println("JWT Filter: Skipping OPTIONS request for path: " + path);
             return true;
         }
-
-        String path = request.getServletPath();
+        
+        // Skip authentication for public endpoints
         boolean shouldSkip = path.equals("/api/login") ||
                path.equals("/userRegistration") ||
                path.startsWith("/userRegistration") ||
@@ -47,6 +51,14 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        // Double-check: if this is a public endpoint, skip all JWT processing
+        String path = request.getServletPath();
+        if (path.equals("/userRegistration") || path.equals("/api/login")) {
+            System.out.println("JWT Filter: Bypassing JWT processing for public endpoint: " + path);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
