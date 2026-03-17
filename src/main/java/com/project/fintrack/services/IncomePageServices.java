@@ -30,7 +30,7 @@ public class IncomePageServices {
 
     public List<IncomeData> getAllIncomeRecords(String username) {
         NewUser user = userRepo.findByUsername(username).orElseThrow();
-        return incRepo.findByUserId(user.getId());
+        return incRepo.findAll();
     }
 
     public IncomeData findIncomeById(Integer id) {
@@ -55,8 +55,7 @@ public class IncomePageServices {
     }
 
     public Map<String, Double> getTotalIncomeBySource(String username) {
-        NewUser user = userRepo.findByUsername(username).orElseThrow();
-        List<Object[]> results = incRepo.findTotalIncomeBySourceAndUserId(user.getId());
+        List<Object[]> results = incRepo.findTotalIncomeBySource();
         Map<String, Double> incomeMap = new HashMap<>();
         for (Object[] row : results) {
             String source = (String) row[0];

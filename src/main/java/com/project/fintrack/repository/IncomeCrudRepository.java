@@ -21,16 +21,4 @@ public interface IncomeCrudRepository extends JpaRepository<IncomeData, Integer>
 
     @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i WHERE MONTH(i.date) = MONTH(CURRENT_DATE()) AND YEAR(i.date) = YEAR(CURRENT_DATE()) GROUP BY i.source")
     List<Object[]> getIncomeBreakdownForCurrentMonth();
-
-    // new methods for user isolation
-    List<IncomeData> findByUserId(Integer userId);
-
-    @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i WHERE i.userId = :userId GROUP BY i.source")
-    List<Object[]> findTotalIncomeBySourceAndUserId(@Param("userId") Integer userId);
-
-    @Query("SELECT SUM(i.amount) FROM IncomeData i WHERE i.userId = :userId")
-    Double totalIncomeByUserId(@Param("userId") Integer userId);
-
-    @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i WHERE i.userId = :userId AND MONTH(i.date) = MONTH(CURRENT_DATE()) AND YEAR(i.date) = YEAR(CURRENT_DATE()) GROUP BY i.source")
-    List<Object[]> getIncomeBreakdownForCurrentMonthByUserId(@Param("userId") Integer userId);
 }

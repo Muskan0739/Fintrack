@@ -27,8 +27,7 @@ public class ExpensePageServices {
     }
 
     public List<ExpenseFields> getExpenseRecord(String username) {
-        NewUser user = userRepo.findByUsername(username).orElseThrow();
-        return ecr.findByUserId(user.getId());
+        return ecr.findAll();
     }
 
     public ExpenseFields returnExpenseWithId(Integer id){

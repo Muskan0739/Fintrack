@@ -20,13 +20,4 @@ public interface ExpenseCrudRepository extends JpaRepository<ExpenseFields, Inte
 
     @Query("SELECT e.category, SUM(e.amount) FROM ExpenseFields e WHERE MONTH(e.date) = MONTH(CURRENT_DATE()) AND YEAR(e.date) = YEAR(CURRENT_DATE()) GROUP BY e.category")
     List<Object[]> getExpenseBreakdownForCurrentMonth();
-
-    // new method for user isolation
-    List<ExpenseFields> findByUserId(Integer userId);
-
-    @Query("SELECT SUM(e.amount) FROM ExpenseFields e WHERE e.userId = :userId")
-    Double totalExpenseByUserId(@Param("userId") Integer userId);
-
-    @Query("SELECT e.category, SUM(e.amount) FROM ExpenseFields e WHERE e.userId = :userId AND MONTH(e.date) = MONTH(CURRENT_DATE()) AND YEAR(e.date) = YEAR(CURRENT_DATE()) GROUP BY e.category")
-    List<Object[]> getExpenseBreakdownForCurrentMonthByUserId(@Param("userId") Integer userId);
 }

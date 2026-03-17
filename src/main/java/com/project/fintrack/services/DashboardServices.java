@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.project.fintrack.repository.DashboardRepository;
 import com.project.fintrack.repository.ExpenseCrudRepository;
 import com.project.fintrack.repository.IncomeCrudRepository;
-import com.project.fintrack.services.UserService;
 
 import dto.RecentTransactionDTO;
 
@@ -30,18 +29,15 @@ public class DashboardServices {
     private DashboardRepository dashboardRepo;
     @Autowired
     private BudgetService budgetService;
-    @Autowired
-    private UserService userService;
 
    
     //saving card
     public Map<String, Double> calculateSavings() {
-        int userId = userService.getCurrentUserId();
-        
-    	double totalExpense = expenseRepo.totalExpenseByUserId(userId);
-    	double totalIncome = incomeRepo.totalIncomeByUserId(userId);
+    	double totalExpense= expenseRepo.totalExpense();
+    	double totalIncome= incomeRepo.totalIncome();
     	
-    	double saving = totalIncome - totalExpense;
+    	
+    	double saving= totalIncome- totalExpense;
     	
     	 Map<String, Double> result = new HashMap<>();
          result.put("income", totalIncome);
@@ -53,8 +49,7 @@ public class DashboardServices {
     
     //expense chart
     public Map<String, Double> getExpenseBreakdown() {
-        int userId = userService.getCurrentUserId();
-        List<Object[]> result = expenseRepo.getExpenseBreakdownForCurrentMonthByUserId(userId);
+        List<Object[]> result = expenseRepo.getExpenseBreakdownForCurrentMonth();
         Map<String, Double> categoryMap = new LinkedHashMap<>();
 
         for (Object[] row : result) {
@@ -68,8 +63,7 @@ public class DashboardServices {
     
     //income chart
     public Map<String, Double> getIncomeBreakdown() {
-        int userId = userService.getCurrentUserId();
-        List<Object[]> result = incomeRepo.getIncomeBreakdownForCurrentMonthByUserId(userId);
+        List<Object[]> result = incomeRepo.getIncomeBreakdownForCurrentMonth();
         Map<String, Double> categoryMap = new LinkedHashMap<>();
 
         for (Object[] row : result) {
@@ -82,20 +76,19 @@ public class DashboardServices {
     }
 
     public Map<String, Double> getWeeklySavingsTrend() {
-        int userId = userService.getCurrentUserId();
         Map<Integer, Double> weeklyIncome = new HashMap<>();
         Map<Integer, Double> weeklyExpense = new HashMap<>();
         Map<String, Double> weeklySavings = new LinkedHashMap<>();
 
         // Fill income map (key = week-of-year from DB)
-        for (Object[] row : dashboardRepo.getWeeklyIncomeByUserId(userId)) {
+        for (Object[] row : dashboardRepo.getWeeklyIncome()) {
             Integer week = ((Number) row[0]).intValue();
             Double income = ((Number) row[1]).doubleValue();
             weeklyIncome.put(week, income);
         }
 
         // Fill expense map
-        for (Object[] row : dashboardRepo.getWeeklyExpenseByUserId(userId)) {
+        for (Object[] row : dashboardRepo.getWeeklyExpense()) {
             Integer week = ((Number) row[0]).intValue();
             Double expense = ((Number) row[1]).doubleValue();
             weeklyExpense.put(week, expense);
@@ -117,10 +110,9 @@ public class DashboardServices {
     
     //budget Breakdown section
     public Map<String, Object> getBudgetBreakdown() {
-        int userId = userService.getCurrentUserId();
 
         Double budget = budgetService.getBudgetValue();
-        Double expenses = expenseRepo.totalExpenseByUserId(userId);
+        Double expenses = expenseRepo.totalExpense();
 
         Map<String, Object> response = new HashMap<>();
 
@@ -139,8 +131,7 @@ public class DashboardServices {
 
 
     public List<RecentTransactionDTO> getRecentTransactions() {
-        int userId = userService.getCurrentUserId();
-        List<Object[]> rawResults = dashboardRepo.fetchRecentTransactionsByUserId(userId);
+        List<Object[]> rawResults = dashboardRepo.fetchRecentTransactions();
 
         return rawResults.stream().map(row -> {
 
