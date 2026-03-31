@@ -1,18 +1,29 @@
 # 💰 Fintrack – Personal Finance Tracker
 
-Fintrack is a backend-focused personal finance tracking application built using **Spring Boot**.  
-It allows users to manage their **income and expenses**, view **transaction history**, and track their overall financial health through a simple dashboard.
+Fintrack is a full-stack personal finance tracking application built using Spring Boot.  
+It allows users to manage their income and expenses, view transaction history, and monitor their financial health through a simple dashboard.
 
-This project is built with a **real-world backend architecture** and is being actively enhanced with **Spring Security, Docker, and cloud deployment** to make it production-ready.
+🚀 The project is now fully deployed on cloud and enhanced with:
+
+- 🔐 Spring Security + JWT Authentication  
+- 🐳 Docker & Docker Compose
+
+---
+
+## 🌐 Live Demo
+
+🔗 https://fintrack-bh2n.onrender.com
 
 ---
 
 ## 🚀 Features
 
+- 🔐 Secure User Authentication (JWT-based)  
 - ➕ Add income with backend validation  
 - ➖ Add expenses with backend validation  
 - 📊 View transaction history (income + expenses)  
 - 📈 Dashboard summary for financial tracking  
+- 👤 User-specific data isolation  
 - ❌ Prevents invalid values (negative income/expense)  
 - 🧩 Clean layered architecture (Controller → Service → Repository)
 
@@ -20,12 +31,23 @@ This project is built with a **real-world backend architecture** and is being ac
 
 ## 🛠️ Tech Stack
 
+### Backend
 - **Java 17**
 - **Spring Boot**
+- **Spring Security**
+- **JWT (JSON Web Tokens)**
 - **Spring Data JPA (Hibernate)**
+
+### Database
 - **MySQL**
-- **Maven**
-- **HTML, CSS, JavaScript** (basic frontend)
+
+### Frontend
+- **HTML, CSS, JavaScript**
+
+### DevOps & Deployment
+- **Docker**
+- **Docker Compose**
+- **AWS (Elastic Beanstalk)**
 
 ---
 
@@ -41,12 +63,21 @@ Fintrack
 
 ├── entity
 
-├── exception
+├── security
 
-└── config (upcoming)
+├── config
 
+└── resources
 
-The project follows a clean and maintainable **layered architecture**, similar to production-grade Spring Boot applications.
+---
+
+## 🔐 Authentication Flow
+
+1. User registers  
+2. User logs in → receives JWT token  
+3. Token is sent in Authorization header  
+4. Backend validates token via JWT filter  
+5. Access granted to protected APIs
 
 ---
 
@@ -70,19 +101,18 @@ http://localhost:8080/
 
 ---
 
-## 🔐 Security & Deployment (Coming Soon)
+## 🐳 Running with Docker
 
-The project is currently under active development. Planned upgrades include:
+Run the application using Docker Compose:
+```bash
+docker-compose up --build
+```
 
-🔐 Spring Security with JWT-based authentication
+---
 
-🐳 Dockerization using Docker & Docker Compose
+## ☁️ Deployment
 
-☁️ Cloud deployment (Render / Railway / AWS)
-
-👤 User-specific data isolation
-
-These enhancements are being added incrementally with a clean commit history.
+The application is deployed on Render.
 
 ---
 
@@ -92,21 +122,19 @@ Fintrack is designed to demonstrate:
 
 Strong Spring Boot fundamentals
 
+Secure authentication using JWT
+
 Proper backend validation and error handling
 
 Clean code and layered design
 
-Real-world readiness with upcoming security and DevOps features
-
-It serves as a resume-ready backend project showcasing practical skills expected from a Java/Spring Boot developer.
+Hands-on cloud deployment
 
 ---
 
 ## 📌 Project Status
 
-🚧 Active Development
-
-New features and improvements are being added continuously.
+✅ Deployed & Actively Maintained.
 
 ---
 
