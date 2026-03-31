@@ -12,12 +12,13 @@ import com.project.fintrack.entities.ExpenseFields;
 @Repository
 public interface ExpenseCrudRepository extends JpaRepository<ExpenseFields, Integer> {
 
-    @Query("SELECT SUM(e.amount) from ExpenseFields e WHERE MONTH(e.date) = MONTH(CURRENT_DATE())")
-    Double totalExpenseForCurrentMonth();
 
-    @Query("SELECT SUM(e.amount) from ExpenseFields e")
-    Double totalExpense();
+    @Query("SELECT SUM(e.amount) from ExpenseFields e WHERE e.userId = :userId")
+    Double totalExpenseByUserId(@Param("userId") int userId);
 
-    @Query("SELECT e.category, SUM(e.amount) FROM ExpenseFields e WHERE MONTH(e.date) = MONTH(CURRENT_DATE()) AND YEAR(e.date) = YEAR(CURRENT_DATE()) GROUP BY e.category")
-    List<Object[]> getExpenseBreakdownForCurrentMonth();
+    @Query("SELECT e.category, SUM(e.amount) FROM ExpenseFields e WHERE e.userId = :userId AND MONTH(e.date) = MONTH(CURRENT_DATE()) AND YEAR(e.date) = YEAR(CURRENT_DATE()) GROUP BY e.category")
+    List<Object[]> getExpenseBreakdownForCurrentMonthByUserId(@Param("userId") int userId);
+
+    @Query("SELECT e FROM ExpenseFields e WHERE e.userId = :userId")
+    List<ExpenseFields> findAllByUserId(@Param("userId") int userId);
 }

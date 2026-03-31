@@ -31,7 +31,6 @@ function checkAuth() {
     const token = getAuthToken();
     const username = localStorage.getItem('username');
     
-    // Don't redirect on registration page
     if (!token || !username) {
         if (!window.location.pathname.includes('/login') && 
             !window.location.pathname.includes('/userRegistration') &&

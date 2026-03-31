@@ -78,12 +78,18 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                    .allowedOrigins("https://fintrack-bh2n.onrender.com")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .allowedHeaders("*")
-                    .allowCredentials(true)
-                    .maxAge(3600);
+            	String frontendUrl = System.getenv("FRONTEND_URL");
+
+            	if (frontendUrl == null) {
+            	    frontendUrl = "http://localhost:3000"; // for fallback
+            	}
+            	
+            	registry.addMapping("/**")
+                .allowedOrigins(frontendUrl)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
             }
         };
     }

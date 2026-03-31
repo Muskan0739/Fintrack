@@ -12,13 +12,15 @@ import com.project.fintrack.entities.IncomeData;
 @Repository
 public interface IncomeCrudRepository extends JpaRepository<IncomeData, Integer> {
 
-    // existing methods
-    @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i GROUP BY i.source")
-    List<Object[]> findTotalIncomeBySource();
+    @Query("SELECT SUM(i.amount) from IncomeData i WHERE i.userId = :userId")
+    Double totalIncomeByUserId(@Param("userId") int userId);
 
-    @Query("SELECT SUM(i.amount) from IncomeData i")
-    Double totalIncome();
+    @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i WHERE i.userId = :userId AND MONTH(i.date) = MONTH(CURRENT_DATE()) AND YEAR(i.date) = YEAR(CURRENT_DATE()) GROUP BY i.source")
+    List<Object[]> getIncomeBreakdownForCurrentMonthByUserId(@Param("userId") int userId);
 
-    @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i WHERE MONTH(i.date) = MONTH(CURRENT_DATE()) AND YEAR(i.date) = YEAR(CURRENT_DATE()) GROUP BY i.source")
-    List<Object[]> getIncomeBreakdownForCurrentMonth();
+    @Query("SELECT i.source, SUM(i.amount) FROM IncomeData i WHERE i.userId = :userId GROUP BY i.source")
+    List<Object[]> findTotalIncomeBySourceAndUserId(@Param("userId") int userId);
+
+    @Query("SELECT i FROM IncomeData i WHERE i.userId = :userId")
+    List<IncomeData> findAllByUserId(@Param("userId") int userId);
 }

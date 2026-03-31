@@ -13,6 +13,7 @@ public class HomePageController {
         return "redirect:/index.html";
     }
 
+    //Login page GET API
     @GetMapping(path = "/login")
     public String showLoginPage() {
         return "redirect:/loginPage.html";

@@ -37,7 +37,7 @@ public class UserRegistrationController {
 	    return ResponseEntity.ok(response);
 	}
 
-    //New API: Get current logged-in username from session
+    //Get current logged-in username from session
     @GetMapping("/currentUser")
     public ResponseEntity<Map<String, Object>> getCurrentUser(HttpSession session) {
         Map<String, Object> response = new HashMap<>();

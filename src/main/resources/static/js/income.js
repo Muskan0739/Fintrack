@@ -1,13 +1,10 @@
-// ✅ Enhanced Auth helper with automatic redirect
 function authHeaders() {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
-        console.error("❌ No JWT token found, redirecting to login");
         // Redirect to login if no token
         window.location.href = "/login";
         return null;
     }
-    console.log("✅ Using JWT token:", token.substring(0, 20) + "...");
     return {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -16,10 +13,8 @@ function authHeaders() {
 
 // Check authentication on page load
 const token = localStorage.getItem("jwtToken");
-console.log("🔍 Checking authentication on page load...");
 console.log("Token found:", !!token);
 if (!token) {
-    console.error("❌ No token found, redirecting to login");
     window.location.href = "/login";
 }
 
@@ -44,12 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ✅ Load income breakdown by source
+    //Load income breakdown by source
     async function loadIncomeBySource() {
         const contentDiv = document.querySelector("#income-source-card .breakdown-content");
 
         if (!contentDiv) {
-            console.error("❌ Content div not found!");
+            console.error("Content div not found!");
             return;
         }
 
@@ -57,24 +52,21 @@ document.addEventListener("DOMContentLoaded", () => {
         let totalIncome = 0;
 
         try {
-            console.log("🔍 Fetching income sources...");
+       
             const headers = authHeaders();
             if (!headers) {
-                console.error("❌ No headers returned from authHeaders() - redirecting to login");
-                // authHeaders() already redirects, but we need to return here
+                console.error("No headers returned from authHeaders() - redirecting to login");
                 return;
             }
             
             const response = await fetch('/income/sources', { headers: headers });
-            console.log("🔍 Response status:", response.status);
             
             if (!response.ok) {
-                console.error("❌ Server error:", response.status, response.statusText);
+                console.error("Server error:", response.status, response.statusText);
                 return;
             }
             
             const data = await response.json();
-            console.log("✅ Income sources data:", data);
 
             for (const [source, total] of Object.entries(data)) {
                 totalIncome += total;
@@ -95,30 +87,25 @@ document.addEventListener("DOMContentLoaded", () => {
             contentDiv.appendChild(totalRow);
 
         } catch (error) {
-            console.error("❌ Error fetching income by source:", error);
+            console.error("Error fetching income by source:", error);
         }
     }
 
-    // ✅ Load all income records
+    //Load all income records
     async function loadIncome() {
         try {
-            console.log("🔍 Fetching income records...");
             const headers = authHeaders();
             if (!headers) {
-                console.error("❌ No headers returned from authHeaders()");
                 return;
             }
             
             const response = await fetch('/income/data', { headers: headers });
-            console.log("🔍 Response status:", response.status);
             
             if (!response.ok) {
-                console.error("❌ Server error:", response.status, response.statusText);
                 return;
             }
             
             const data = await response.json();
-            console.log("✅ Income records data:", data);
             
             const tableBody = document.getElementById("table-body");
             tableBody.innerHTML = "";
@@ -142,11 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         } catch (error) {
-            console.error("❌ Error loading income records:", error);
+            console.error("Error loading income records:", error);
         }
     }
 
-    // ✅ Submit income form
+    //Submit income form
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -177,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     errors = await response.json();
                 } catch (err) {
-                    console.error("❌ Non-JSON error response");
+                    console.error("Non-JSON error response");
                 }
 
                 if (errors.amount) document.getElementById("amountError").innerText = errors.amount;
@@ -191,8 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const data = await response.text();
-            console.log("✅ Saved:", data);
-
             form.reset();
             document.getElementById("incomeId").value = "";
 
@@ -200,11 +185,11 @@ document.addEventListener("DOMContentLoaded", () => {
             await loadIncomeBySource();
 
         } catch (error) {
-            console.error("❌ Network / Server error:", error);
+            console.error("Network / Server error:", error);
         }
     });
 
-    // ✅ Event delegation for Edit/Delete buttons
+    //Event delegation for Edit/Delete buttons
     document.getElementById("table-body").addEventListener("click", async (e) => {
         const deleteBtn = e.target.closest(".delete-btn");
         const editBtn = e.target.closest(".edit-btn");
@@ -224,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     await loadIncomeBySource();
 
                 } catch (error) {
-                    console.error("❌ Error deleting income:", error);
+                    console.error("Error deleting income:", error);
                 }
             }
         }
@@ -241,12 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("date").value = data.date.split("T")[0];
 
             } catch (error) {
-                console.error("❌ Error loading income for edit:", error);
+                console.error("Error loading income for edit:", error);
             }
         }
     });
 
-    // Function to check authentication before navigation (shared with script.js)
+    // Function to check authentication before navigation
     function checkAuthAndNavigate(url) {
         const token = localStorage.getItem("jwtToken");
         const username = localStorage.getItem("username");
@@ -260,13 +245,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Initial load - Check authentication first
-    console.log("🔍 Checking authentication before loading data...");
+    //Initial load - Check authentication first
     const headers = authHeaders();
     if (headers) {
         // Only load data if authentication is successful
         loadIncome();
         loadIncomeBySource();
     }
-    // If authHeaders() returned null, it already redirected to login
 });

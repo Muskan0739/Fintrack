@@ -1,5 +1,6 @@
 package com.project.fintrack.controllers;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -44,23 +45,26 @@ public class IncomePageController {
     }
 
     @GetMapping(path="/income/{id}")
-    public ResponseEntity<IncomeData> getIncomeById(@PathVariable("id") Integer id){
-        IncomeData income = incomeService.findIncomeById(id);
+    public ResponseEntity<IncomeData> getIncomeById(@PathVariable("id") Integer id, Principal principal){
+    	String username = principal.getName();
+        IncomeData income = incomeService.findIncomeById(id, username);
         if(income != null) return ResponseEntity.ok(income);
         else return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/income/{id}")
-    public ResponseEntity<String> updateIncome(@PathVariable Integer id, @Valid @RequestBody IncomeData updatedIncome) {
-        incomeService.save(updatedIncome, id);
+    public ResponseEntity<String> updateIncome(@PathVariable Integer id, @Valid @RequestBody IncomeData updatedIncome, Principal principal) {
+    	String username = principal.getName();
+        incomeService.save(updatedIncome, id, username);
         return ResponseEntity.ok("Income updated");
     }
 
     @DeleteMapping("/income/{id}")
-    public ResponseEntity<String> deleteIncomeRow(@PathVariable("id") Integer id){
-        Boolean deletedRow = incomeService.deleteIncomeRecord(id);
+    public ResponseEntity<String> deleteIncomeRow(@PathVariable("id") Integer id, Principal principal){
+    	String username = principal.getName();
+        Boolean deletedRow = incomeService.deleteIncomeRecord(id, username);
         if(deletedRow) return ResponseEntity.ok("Row deleted");
-        else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Body not found");
+        else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record not found");
     }
 
     @GetMapping("/income/sources")

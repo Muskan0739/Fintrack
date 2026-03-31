@@ -1,5 +1,3 @@
-
-// ✅ Enhanced Auth helper with automatic redirect
 function authHeaders() {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
@@ -20,7 +18,6 @@ if (!token) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Expense JS loaded ✅");
 
     const addExpenseBtn = document.getElementById("addExpense");
     if (addExpenseBtn) {
@@ -54,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupSetBudget();
 });
 
-// Function to check authentication before navigation (shared with script.js)
+// Function to check authentication before navigation
 function checkAuthAndNavigate(url) {
     const token = localStorage.getItem("jwtToken");
     const username = localStorage.getItem("username");
@@ -68,21 +65,20 @@ function checkAuthAndNavigate(url) {
     }
 }
 
-// 🔁 Load Expenses and render the table
+//Load Expenses and render the table
 function loadExpenses() {
     fetch('/api/expenses', { headers: authHeaders() })
         .then(response => response.json())
         .then(data => {
-            console.log("Fetched expense data ✅:", data);
             renderExpenses(data);
             populateCategoryDropdown(data);
         })
         .catch(error => {
-            console.error("Error fetching expense records ❌:", error);
+            console.error("Error fetching expense records:", error);
         });
 }
 
-// ✨ Render expenses in table
+//Render expenses in table
 function renderExpenses(expenses) {
     const tableBody = document.getElementById("expense-table-body");
     if (!tableBody) return;
@@ -110,7 +106,7 @@ function renderExpenses(expenses) {
     displayTotalAmount(expenses);
 }
 
-// ✏️ Update/Delete Actions
+//Update/Delete Actions
 function setupTableListeners() {
     document.addEventListener("click", (event) => {
         if (event.target.classList.contains("update-btn")) {
@@ -134,20 +130,20 @@ function setupTableListeners() {
                         }
                     })
                     .catch(error => {
-                        console.error("❌ Error deleting expense:", error);
+                        console.error("Error deleting expense:", error);
                     });
             }
         }
     });
 }
 
-// 🧹 Filtering logic
+//Filtering logic
 function populateCategoryDropdown(expenses) {
     const dropdown = document.getElementById("customDropdown");
     const filterIcon = document.getElementById("filterToggle");
 
     if (!dropdown || !filterIcon) {
-        console.warn("⚠️ Filter icon or dropdown not found.");
+        console.warn("Filter icon or dropdown not found.");
         return;
     }
 
@@ -203,12 +199,12 @@ function setupCategoryFilter() {
             renderExpenses(filtered);
             dropdown.classList.remove("show");
         } catch (err) {
-            console.error("Error filtering expenses ❌:", err);
+            console.error("Error filtering expenses:", err);
         }
     };
 }
 
-// 📅 Today's Total
+//Today's Total
 function displayTotalAmount(expenses) {
     const today = new Date().toISOString().split("T")[0];
     let total = 0;
@@ -223,7 +219,7 @@ function displayTotalAmount(expenses) {
     if (totalEl) totalEl.textContent = total;
 }
 
-// 💰 Set Budget
+//Set Budget
 function setupSetBudget() {
     const setBtn = document.getElementById("set-btn");
     const budgetInput = document.getElementById("budget");
@@ -261,7 +257,7 @@ function setupSetBudget() {
                 alert('Something went wrong, please try again.');
             }
         } catch (error) {
-            console.error('Error setting budget ❌:', error);
+            console.error('Error setting budget:', error);
             alert('There was an error setting the budget. Please try again.');
         }
     });

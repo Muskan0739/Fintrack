@@ -1,7 +1,6 @@
 const token = localStorage.getItem("jwtToken");
 if (!token) window.location.href = "/login";
 
-// ✅ Auth helper
 function authHeaders() {
     const token = localStorage.getItem("jwtToken");
     return {
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (dateError) dateError.innerText = "";
     }
 
-    // ---------- EDIT MODE: FETCH EXISTING DATA ----------
     if (isEditMode) {
         fetch(`/addExpense/${id}`, { headers: authHeaders() })
             .then(response => response.json())
@@ -37,10 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("amount").value = data.amount;
                 document.getElementById("note").value = data.note;
             })
-            .catch(error => console.error("Error fetching expense data ❌", error));
+            .catch(error => console.error("Error fetching expense data", error));
     }
 
-    // ---------- FORM SUBMIT ----------
+    // FORM SUBMIT
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearErrors();
@@ -67,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
                         errors = await response.json();
                     } catch (e) {
-                        // Non-JSON error (e.g., 401/403 from Spring Security)
+                       
                         if (response.status === 401 || response.status === 403) {
                             alert("Your session has expired or you are not authorized. Please log in again.");
                             localStorage.removeItem("jwtToken");
@@ -75,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             window.location.href = "/login";
                             return;
                         }
-                        console.error("Unexpected error response ❌:", e);
+                        console.error("Unexpected error response:", e);
                         alert("Something went wrong. Please try again.");
                         return;
                     }
@@ -85,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (errors.date) document.getElementById("dateError").innerText = errors.date;
                 }
             } catch (error) {
-                console.error("Error during update ❌:", error);
+                console.error("Error during update:", error);
             }
 
         } else {
@@ -103,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
                         errors = await response.json();
                     } catch (e) {
-                        // Non-JSON error (e.g., 401/403 from Spring Security)
+                       
                         if (response.status === 401 || response.status === 403) {
                             alert("Your session has expired or you are not authorized. Please log in again.");
                             localStorage.removeItem("jwtToken");
@@ -111,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             window.location.href = "/login";
                             return;
                         }
-                        console.error("Unexpected error response ❌:", e);
+                        console.error("Unexpected error response:", e);
                         alert("Something went wrong. Please try again.");
                         return;
                     }
@@ -121,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (errors.date) document.getElementById("dateError").innerText = errors.date;
                 }
             } catch (error) {
-                console.error("Error during add ❌:", error);
+                console.error("Error during add:", error);
             }
         }
     });

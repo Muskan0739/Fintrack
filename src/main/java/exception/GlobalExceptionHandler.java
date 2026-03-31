@@ -18,7 +18,6 @@ import jakarta.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // ✅ THIS overrides DefaultHandlerExceptionResolver
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpHeaders headers,
@@ -33,8 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.badRequest().body(errors);
     }
-
-    // ✅ Hibernate validation (persist/update)
+    
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleConstraintViolation(
             ConstraintViolationException ex) {

@@ -1,5 +1,6 @@
 package com.project.fintrack.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,22 +41,25 @@ public class ExpensePageController {
     }
 
     @GetMapping("/addExpense/{id}")
-    public ResponseEntity<ExpenseFields> getExpenseFormById(@PathVariable("id") Integer id){
-        ExpenseFields expense = expenseServices.returnExpenseWithId(id);
+    public ResponseEntity<ExpenseFields> getExpenseFormById(@PathVariable("id") Integer id, Principal principal){
+    	String username = principal.getName();
+        ExpenseFields expense = expenseServices.returnExpenseWithId(id, username);
         if (expense != null) return ResponseEntity.ok(expense);
         else return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/addExpense/{id}")
-    public ResponseEntity<ExpenseFields> updateExpense(@PathVariable Integer id, @RequestBody ExpenseFields updatedExpense) {
-        ExpenseFields saved = expenseServices.saveUpdatedExpense(id, updatedExpense);
+    public ResponseEntity<ExpenseFields> updateExpense(@PathVariable Integer id, @RequestBody ExpenseFields updatedExpense, Principal principal) {
+    	String username = principal.getName();
+        ExpenseFields saved = expenseServices.saveUpdatedExpense(id, updatedExpense, username);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping(path="/expensePage/{id}")
-    public ResponseEntity<String> deleteRow(@PathVariable Integer id){
-        Boolean deletedRow = expenseServices.deleteOneRow(id);
+    @DeleteMapping(path="/api/expenses/{id}")
+    public ResponseEntity<String> deleteRow(@PathVariable Integer id, Principal principal){
+    	String username = principal.getName();
+        Boolean deletedRow = expenseServices.deleteOneRow(id, username);
         if(deletedRow) return ResponseEntity.ok("One Row Deleted");
-        else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Body not found");
+        else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record not found");
     }
 }

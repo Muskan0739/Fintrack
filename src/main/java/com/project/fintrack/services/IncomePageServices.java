@@ -30,32 +30,55 @@ public class IncomePageServices {
 
     public List<IncomeData> getAllIncomeRecords(String username) {
         NewUser user = userRepo.findByUsername(username).orElseThrow();
-        return incRepo.findAll();
+        return incRepo.findAllByUserId(user.getId());
     }
 
-    public IncomeData findIncomeById(Integer id) {
-        return incRepo.findById(id).orElse(null);
+    public IncomeData findIncomeById(Integer id, String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+
+        IncomeData income = incRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Income not found"));
+
+        if (income.getUserId() != user.getId()) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        return income;
     }
 
-    public void save(IncomeData updatedIncome, Integer id) {
-        IncomeData income = incRepo.findById(id).get();
+    public void save(IncomeData updatedIncome, Integer id, String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+
+        IncomeData income = incRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Income not found"));
+
+        if (income.getUserId() != user.getId()) {
+            throw new RuntimeException("Unauthorized access");
+        }
+
         income.setDate(updatedIncome.getDate());
         income.setAmount(updatedIncome.getAmount());
         income.setSource(updatedIncome.getSource());
+
         incRepo.save(income);
     }
 
-    public Boolean deleteIncomeRecord(Integer id) {
-        Optional<IncomeData> incomeRecord = incRepo.findById(id);
-        if (incomeRecord.isPresent()) {
-            incRepo.deleteById(id);
-            return true;
-        }
-        return false;
+    public Boolean deleteIncomeRecord(Integer id, String username) {
+    	NewUser user = userRepo.findByUsername(username).orElseThrow();
+    	  IncomeData income = incRepo.findById(id)
+    	            .orElseThrow(() -> new RuntimeException("Income not found"));
+    	  
+    	  if (income.getUserId() != user.getId()) {
+    	        throw new RuntimeException("Unauthorized");
+    	    }
+    	  
+    	  incRepo.deleteById(id);
+    	    return true;
     }
 
     public Map<String, Double> getTotalIncomeBySource(String username) {
-        List<Object[]> results = incRepo.findTotalIncomeBySource();
+    	NewUser user = userRepo.findByUsername(username).orElseThrow();
+        List<Object[]> results = incRepo.findTotalIncomeBySourceAndUserId(user.getId());
         Map<String, Double> incomeMap = new HashMap<>();
         for (Object[] row : results) {
             String source = (String) row[0];

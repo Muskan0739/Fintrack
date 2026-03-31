@@ -1,5 +1,3 @@
-
-/* GET API for userregistration Form */
 document.addEventListener("DOMContentLoaded", () => {
     const registerBtn = document.getElementById("registerBtn");
     if (registerBtn) {

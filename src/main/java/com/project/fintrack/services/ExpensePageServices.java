@@ -27,24 +27,51 @@ public class ExpensePageServices {
     }
 
     public List<ExpenseFields> getExpenseRecord(String username) {
-        return ecr.findAll();
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+        return ecr.findAllByUserId(user.getId());
     }
 
-    public ExpenseFields returnExpenseWithId(Integer id){
-        return ecr.findById(id).orElse(null);
+    public ExpenseFields returnExpenseWithId(Integer id, String username){
+    	 NewUser user = userRepo.findByUsername(username).orElseThrow();
+    	 
+    	 ExpenseFields expense = ecr.findById(id)
+                 .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+         if (expense.getUserId() != user.getId()) {
+             throw new RuntimeException("Unauthorized access");
+         }
+    	 
+        return expense;
     }
 
-    public ExpenseFields saveUpdatedExpense(Integer id, ExpenseFields updatedExpense) {
-        ExpenseFields expense = ecr.findById(id).get();
+    public ExpenseFields saveUpdatedExpense(Integer id, ExpenseFields updatedExpense, String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
+
+        ExpenseFields expense = ecr.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        if (expense.getUserId() != user.getId()) {
+            throw new RuntimeException("Unauthorized access");
+        }
+
         expense.setCategory(updatedExpense.getCategory());
         expense.setDate(updatedExpense.getDate());
         expense.setAmount(updatedExpense.getAmount());
         expense.setNote(updatedExpense.getNote());
+
         return ecr.save(expense);
     }
+    public Boolean deleteOneRow(Integer id, String username) {
+        NewUser user = userRepo.findByUsername(username).orElseThrow();
 
-    public Boolean deleteOneRow(Integer id) {
+        ExpenseFields expense = ecr.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        if (expense.getUserId() != user.getId()) {
+            throw new RuntimeException("Unauthorized");
+        }
+
         ecr.deleteById(id);
-        return ecr.findById(id).isEmpty();
+        return true;
     }
 }

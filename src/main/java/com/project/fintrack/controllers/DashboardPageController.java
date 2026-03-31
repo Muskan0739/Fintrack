@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,44 +18,52 @@ import dto.RecentTransactionDTO;
 @RequestMapping("/dashboard")
 public class DashboardPageController {
 
-	
-	 @Autowired 
-	 private DashboardServices dashboardService;
-	 
-	 @GetMapping(path="/saving-summary")
-	 public ResponseEntity<Map<String, Double>> savingTicketData(){
-		 Map<String, Double> data= dashboardService.calculateSavings();
-		 
-		 return ResponseEntity.ok(data);
-	 }
-	 
-	 @GetMapping("/expense-breakdown")
-	 public ResponseEntity<Map<String, Double>> getExpenseBreakdown() {
-	     Map<String, Double> breakdown = dashboardService.getExpenseBreakdown();
-	     return ResponseEntity.ok(breakdown);
-	 }
-	 
-	 @GetMapping("/income-breakdown")
-	 public ResponseEntity<Map<String, Double>> getIncomeBreakdown() {
-	     Map<String, Double> breakdown = dashboardService.getIncomeBreakdown();
-	     return ResponseEntity.ok(breakdown);
-	 }
+    @Autowired 
+    private DashboardServices dashboardService;
 
-	 @GetMapping("/savings-trend")
-	 public ResponseEntity<Map<String, Double>> getSavingsTrend() {
-	     return ResponseEntity.ok(dashboardService.getWeeklySavingsTrend());
-	 }
+    private String getLoggedInUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
 
-	 @GetMapping("/budget-breakdown")
-	 public ResponseEntity<Map<String, Object>> getBudgetBreakdown() {
-	     Map<String, Object> breakdown = dashboardService.getBudgetBreakdown();
-	     return ResponseEntity.ok(breakdown);
-	 }
+    @GetMapping("/saving-summary")
+    public ResponseEntity<Map<String, Double>> savingTicketData(){
+        return ResponseEntity.ok(
+            dashboardService.calculateSavings(getLoggedInUsername())
+        );
+    }
 
-	 @GetMapping("/recent-transactions")
-	 public ResponseEntity<List<RecentTransactionDTO>> getRecentTransactions() {
-	     return ResponseEntity.ok(dashboardService.getRecentTransactions());
-	 }
+    @GetMapping("/expense-breakdown")
+    public ResponseEntity<Map<String, Double>> getExpenseBreakdown() {
+        return ResponseEntity.ok(
+            dashboardService.getExpenseBreakdown(getLoggedInUsername())
+        );
+    }
 
+    @GetMapping("/income-breakdown")
+    public ResponseEntity<Map<String, Double>> getIncomeBreakdown() {
+        return ResponseEntity.ok(
+            dashboardService.getIncomeBreakdown(getLoggedInUsername())
+        );
+    }
 
+    @GetMapping("/savings-trend")
+    public ResponseEntity<Map<String, Double>> getSavingsTrend() {
+        return ResponseEntity.ok(
+            dashboardService.getWeeklySavingsTrend(getLoggedInUsername())
+        );
+    }
+
+    @GetMapping("/budget-breakdown")
+    public ResponseEntity<Map<String, Object>> getBudgetBreakdown() {
+        return ResponseEntity.ok(
+            dashboardService.getBudgetBreakdown(getLoggedInUsername())
+        );
+    }
+
+    @GetMapping("/recent-transactions")
+    public ResponseEntity<List<RecentTransactionDTO>> getRecentTransactions() {
+        return ResponseEntity.ok(
+            dashboardService.getRecentTransactions(getLoggedInUsername())
+        );
+    }
 }
