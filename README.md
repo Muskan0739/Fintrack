@@ -22,9 +22,8 @@ It allows users to manage their income and expenses, view transaction history, a
 - ➕ Add income with backend validation  
 - ➖ Add expenses with backend validation  
 - 📊 View transaction history (income + expenses)  
-- 📈 Dashboard summary for financial tracking  
+- 📈 Dashboard summary for financial tracking with visual insights(Pie and Line charts)  
 - 👤 User-specific data isolation  
-- ❌ Prevents invalid values (negative income/expense)  
 - 🧩 Clean layered architecture (Controller → Service → Repository)
 
 ---
@@ -50,6 +49,8 @@ It allows users to manage their income and expenses, view transaction history, a
 - **AWS (Elastic Beanstalk)**
 
 ---
+## 📸 Screenshots
+
 
 ## 🏗️ Project Structure
 
