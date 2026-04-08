@@ -9,6 +9,13 @@ It allows users to manage their income and expenses, view transaction history, a
 - 🐳 Docker & Docker Compose
 
 ---
+## 💡 Why This Project?
+
+Fintrack was built to provide a simple and efficient way to track personal income, expenses and provides visual insights of user's data using charts.  
+It also showcases my ability to design secure and scalable backend systems using Spring Boot, 
+implement JWT-based authentication, and containerize applications with Docker.
+
+---
 
 ## 🌐 Live Demo
 
@@ -50,7 +57,16 @@ It allows users to manage their income and expenses, view transaction history, a
 
 ---
 ## 📸 Screenshots
+### HomePage
+![HomePage](assets/HomePage.png)
 
+### Login
+![Login](assets/Login.png)
+
+### Dashboard
+![Dashboard](assets/Dashboard.png)
+
+---
 
 ## 🏗️ Project Structure
 
